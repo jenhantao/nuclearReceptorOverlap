@@ -9,38 +9,59 @@ stepOne=$2 # run basic analysis for each tag directory
 stepTwo=$3 # mege peaks and look for overlapping cistromes
 stepThree=$4 # conduct differential motif analysis on overlapping cistromes
 
+# iterate over each directory and get the 
+	for path in $inputPath/*
+	do
+		[ -e "${path}/tagInfo.txt" ] || continue # if not a directory, skip
+		mm9=$(grep $genome $path/tagInfo.txt | wc -l)
+		if [ "$mm9" == "0" ]
+		then
+			echo "WARNING: the following tag directory does not use the genome ${genome}: $path"
+		fi
+	done
+
+
 ### basic analysis for each the peaks and define cistromes ###
 if [ stepOne ]
 then
 	#UCSC visualization (makeUCSCfile, makeBigWig.pl)
-	if [ makeUCSC ] 
+	#if [ makeUCSC ] 
+	if [ true ] 
 	then
-
+		echo "makeUCSC"
+		# iterate over all tag directories and make a hub	
+		for path in $inputPath/*
+		do
+   			[ -d "${path}" ] || continue # if not a directory, skip
+    			dirname="$(basename "${path}")"
+			echo $dirname
+		done
+		#makeMultiWigHub.pl $hubName $genome -d $tagDir
 	fi
 	#Peak finding / Transcript detection / Feature identification (findPeaks)
-	if [ makeUCSC ] 
+	if [ findPeaks ] 
 	then
-
+		echo "findPeaks"
 	fi
 	#Motif analysis (findMotifsGenome.pl)
-	if [ makeUCSC ] 
+	if [ findMotifs ] 
 	then
-
+		echo "findMotifs"
 	fi
 	#Annotation of Peaks (annotatePeaks.pl)
-	if [ makeUCSC ] 
+	if [ annotatePeaks ] 
 	then
-
+		echo "annotatePeaks"
 	fi
 	#Quantification of Data at Peaks/Regions in the Genome/Histograms and Heatmaps (annotatePeaks.pl)
-	if [ makeUCSC ] 
+	if [ quantifyPeaks ] 
 	then
-
+		echo "quantifyPeaks"
 	fi
 	#Quantification of Transcripts and Repeats (analyzeRNA.pl, analyzeRepeats.pl)
-	if [ makeUCSC ] 
+	if [ quantifyTranscripts ] 
 	then
-
+		echo "quantifyTranscripts"
 	fi
 fi
 
