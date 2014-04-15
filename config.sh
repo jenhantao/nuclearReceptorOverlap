@@ -13,11 +13,11 @@ export hub="tao"
 export genome="mm9"
 export control="/data/mm9/ThioMac/ChIP/NuclearReceptors/NURSA_njs/NR-BLRP-Nathan/BLRP-Nathan-old/BirA-input-Nathan/"
 export useControl=true
-export updateTags=true
+export updateTags=false
 # options for whether or not to run pipeline stages
-export makeUCSC=false
-export findPeaks=false
-export findMotifs=false
+export makeUCSC=true
+export findPeaks=true
+export findMotifs=true
 export annotatePeaks=true
 export quantifyPeaks=true
 export quantifyTranscripts=true

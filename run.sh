@@ -97,7 +97,21 @@ then
 	#Annotation of Peaks (annotatePeaks.pl)
 	if $annotatePeaks
 	then
-		echo "annotatePeaks"
+		echo "annotating peaks"
+		for path in $outputDir/*tsv
+		do
+   			[ -f "${path}" ] || continue
+			command="annotatePeaks.pl"
+			command+=" "$path
+			# run commands in the background
+			outPath=$path
+			outPath=${outPath%_peaks.tsv}
+			outPath=${outPath##*/}_annotatedPeaks.tsv
+			command+=" $genome > ${outputDir}/${outPath}"
+			echo $command
+			#$($command)
+		done
+
 	fi
 	#Quantification of Data at Peaks/Regions in the Genome/Histograms and Heatmaps (annotatePeaks.pl)
 	if $quantifyPeaks 
