@@ -8,12 +8,13 @@ inputPath=$1 # path to directory containing all tag directories
 stepOne=$2 # run basic analysis for each tag directory
 stepTwo=$3 # mege peaks and look for overlapping cistromes
 stepThree=$4 # conduct differential motif analysis on overlapping cistromes
-echo $outputDir
+
 if [ ! -d $outputDir ]
 then
 mkdir $outputDir
 fi
 
+# validation and update if necessary
 for path in $inputPath/*
 do
 	[ -e "${path}/tagInfo.txt" ] || continue # if not a directory, skip
@@ -22,6 +23,13 @@ do
 	if [ "$mm9" == "0" ]
 	then
 		echo "WARNING: the following tag directory does not use the genome ${genome}: $path"
+	fi
+	# update tag directories if option is on
+	if $updateTags
+	then
+		command="makeTagDirectory ${path} -update -genome mm9"
+		echo $command
+		$($command)
 	fi
 done
 
@@ -63,7 +71,7 @@ then
 			fi
 			#command+=" &"
 			echo $command
-			$($command)
+			$($command) > log.txt
 		done
 
 	fi
@@ -80,7 +88,7 @@ then
 			outPath=$path
 			outPath=${outPath%_peaks.tsv}
 			outPath=${outPath##*/}_motifs
-			command+=" $genome $outPath"
+			command+=" $genome ${outputDir}/${outPath}"
 			echo $command
 			$($command)
 		done
