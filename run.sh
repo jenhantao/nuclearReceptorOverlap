@@ -14,29 +14,30 @@ then
 mkdir $outputDir
 fi
 
-# validation and update if necessary
-for path in $inputPath/*
-do
-	[ -e "${path}/tagInfo.txt" ] || continue # if not a directory, skip
-	# if mm9 is specified, it should appear in tagInfo.txt at least once
-	mm9=$(grep $genome $path/tagInfo.txt | wc -l)
-	if [ "$mm9" == "0" ]
-	then
-		echo "WARNING: the following tag directory does not use the genome ${genome}: $path"
-	fi
-	# update tag directories if option is on
-	if $updateTags
-	then
-		command="makeTagDirectory ${path} -update -genome mm9"
-		echo $command
-		$($command)
-	fi
-done
 
 
 ### basic analysis for each the peaks and define cistromes ###
 if $stepOne
 then
+	# validation and update if necessary
+	for path in $inputPath/*
+	do
+		[ -e "${path}/tagInfo.txt" ] || continue # if not a directory, skip
+		# if mm9 is specified, it should appear in tagInfo.txt at least once
+		mm9=$(grep $genome $path/tagInfo.txt | wc -l)
+		if [ "$mm9" == "0" ]
+		then
+			echo "WARNING: the following tag directory does not use the genome ${genome}: $path"
+		fi
+		# update tag directories if option is on
+		if $updateTags
+		then
+			command="makeTagDirectory ${path} -update -genome mm9"
+			echo $command
+			$($command)
+		fi
+	done
+
 	#UCSC visualization (makeUCSCfile, makeBigWig.pl)
 	if $makeUCSC
 	then
@@ -98,7 +99,7 @@ then
 	if $annotatePeaks
 	then
 		echo "annotating peaks"
-		for path in $outputDir/*tsv
+		for path in $outputDir/*_peaks.tsv
 		do
    			[ -f "${path}" ] || continue
 			command="annotatePeaks.pl"
@@ -107,25 +108,35 @@ then
 			outPath=$path
 			outPath=${outPath%_peaks.tsv}
 			outPath=${outPath##*/}_annotatedPeaks.tsv
-			command+=" $genome > ${outputDir}/${outPath}"
+			#command+=" $genome > ${outputDir}/${outPath}"
+			command+=" $genome"
 			echo $command
-			#$($command)
+
+			$($command > ${outputDir}/${outPath})
 		done
 
 	fi
 	#Quantification of Data at Peaks/Regions in the Genome/Histograms and Heatmaps (annotatePeaks.pl)
 	if $quantifyPeaks 
 	then
-		echo "quantifyPeaks"
-	fi
-	#Quantification of Transcripts and Repeats (analyzeRNA.pl, analyzeRepeats.pl)
-	if $quantifyTranscripts
-	then
-		echo "quantifyTranscripts"
+		echo "quantifying peaks"
+		# not sure what I need to do here, this will evolve later on
+		# the same script is used for annotating peaks, and so this can be wrapped in the previous section
 	fi
 fi
 
-### merge the peaks and look for overlapping cistromes ###
-
+### merge the peaks and look for overlapping cistromes ##
+if $stepTwo
+then
+echo "calculating overlapping cistromes"
+python calculateOverlap.py $outputDir $mergePeaks
+fi
 
 ### conduct differential motif analysis on overlapping cistromes ###
+if $stepThree
+then
+echo "conducting differential motif analysis"
+fi
+
+
+

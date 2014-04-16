@@ -14,10 +14,11 @@ export genome="mm9"
 export control="/data/mm9/ThioMac/ChIP/NuclearReceptors/NURSA_njs/NR-BLRP-Nathan/BLRP-Nathan-old/BirA-input-Nathan/"
 export useControl=true
 export updateTags=false
+export overlapDistance=200 # bp distance for calculating overlaps
+export mergeStrands=true # ignore strands when merging peaks
 # options for whether or not to run pipeline stages
-export makeUCSC=true
-export findPeaks=true
-export findMotifs=true
-export annotatePeaks=true
-export quantifyPeaks=true
-export quantifyTranscripts=true
+export makeUCSC=false
+export findPeaks=false
+export findMotifs=false
+export annotatePeaks=false
+export quantifyPeaks=false
