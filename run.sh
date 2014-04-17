@@ -13,6 +13,7 @@ if [ ! -d $outputDir ]
 then
 mkdir $outputDir
 fi
+unset IFS
 
 
 
@@ -129,7 +130,30 @@ fi
 if $stepTwo
 then
 echo "calculating overlapping cistromes"
-python calculateOverlap.py $outputDir $mergePeaks
+# using homer's merge peaks method instead
+	echo "extending peaks"
+	# iterate through each peak file and modify the start and the end
+	for path in $outputDir/*_annotatedPeaks.tsv
+	do
+		[ -f "${path}" ] || continue
+		outPath=$path
+		outPath=${outPath%_annotatedPeaks.tsv}
+		outPath=${outPath##*/}_extendedPeaks.tsv
+		python extendPeaks.py $path $outPath $overlapDistance
+			
+	done
+	# call merge peaks
+	for path in $outputDir/*_annotatedPeaks.tsv
+	do
+		[ -f "${path}" ] || continue
+		outPath=$path
+		outPath=${outPath%_annotatedPeaks.tsv}
+		outPath=${outPath##*/}_extendedPeaks.tsv
+		python extendPeaks.py $path ${outputDir}/${outPath} $overlapDistance
+			
+	done
+
+
 fi
 
 ### conduct differential motif analysis on overlapping cistromes ###
