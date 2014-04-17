@@ -138,19 +138,30 @@ echo "calculating overlapping cistromes"
 		[ -f "${path}" ] || continue
 		outPath=$path
 		outPath=${outPath%_annotatedPeaks.tsv}
-		outPath=${outPath##*/}_extendedPeaks.tsv
-		python extendPeaks.py $path $outPath $overlapDistance
+		outPath=${outPath##*/}_ext.tsv
+		python extendPeaks.py $path ${outputDir}/${outPath} $overlapDistance
 			
 	done
 	# call merge peaks
-	for path in $outputDir/*_annotatedPeaks.tsv
+	last=""
+	currentName=""
+	empty=""
+	for path in $outputDir/*_ext.tsv
 	do
+		basepath=$(basename ${path})
+		basepath=${basepath%_ext.tsv}
+		basepath=${basepath##*/}
 		[ -f "${path}" ] || continue
-		outPath=$path
-		outPath=${outPath%_annotatedPeaks.tsv}
-		outPath=${outPath##*/}_extendedPeaks.tsv
-		python extendPeaks.py $path ${outputDir}/${outPath} $overlapDistance
-			
+
+		if [ "$last" == "" ]
+		then
+			currentName+=$basepath
+		else
+			mergePeaks -d given $currentName $path > "${currentName}|${basepath}"
+			currentName+="|$basepath"
+		fi
+		last=$basepath
+		echo $currentName
 	done
 
 
