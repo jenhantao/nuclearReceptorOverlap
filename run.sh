@@ -157,11 +157,10 @@ echo "calculating overlapping cistromes"
 		then
 			currentName+=$basepath
 		else
-			mergePeaks -d given $currentName $path > "${currentName}|${basepath}"
+			mergePeaks -d given $currentName $path > $outputDir/"${currentName}|${basepath}"
 			currentName+="|$basepath"
 		fi
 		last=$basepath
-		echo $currentName
 	done
 
 
