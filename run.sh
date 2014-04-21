@@ -130,7 +130,6 @@ fi
 if $stepTwo
 then
 echo "calculating overlapping cistromes"
-# using homer's merge peaks method instead
 	echo "extending peaks"
 	# iterate through each peak file and modify the start and the end
 	for path in $outputDir/*_annotatedPeaks.tsv
@@ -155,14 +154,17 @@ echo "calculating overlapping cistromes"
 
 		if [ "$last" == "" ]
 		then
-			currentName+=$basepath
+			echo "### COPYING ###"
+			cp $path $outputDir/current.tsv
 		else
-			mergePeaks -d given $currentName $path > $outputDir/"${currentName}|${basepath}"
+			mergePeaks -d given $outputDir/current.tsv $path > $outputDir/merged.tsv
+			mv $outputDir/merged.tsv $outputDir/current.tsv
 			currentName+="|$basepath"
 		fi
 		last=$basepath
 	done
-
+	# annotate merged file with a column indicating peak origins
+	# python annotateMergedPeaks.py $outputDir/current.tsv $outputDir
 
 fi
 
@@ -171,6 +173,5 @@ if $stepThree
 then
 echo "conducting differential motif analysis"
 fi
-
 
 
