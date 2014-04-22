@@ -129,7 +129,7 @@ fi
 ### merge the peaks and look for overlapping cistromes ##
 if $stepTwo
 then
-echo "calculating overlapping cistromes"
+	echo "calculating overlapping cistromes"
 	echo "extending peaks"
 	# iterate through each peak file and modify the start and the end
 	for path in $outputDir/*_annotatedPeaks.tsv
@@ -142,29 +142,17 @@ echo "calculating overlapping cistromes"
 			
 	done
 	# call merge peaks
-	last=""
-	currentName=""
-	empty=""
+	command="mergePeaks -d given "
 	for path in $outputDir/*_ext.tsv
 	do
-		basepath=$(basename ${path})
-		basepath=${basepath%_ext.tsv}
-		basepath=${basepath##*/}
-		[ -f "${path}" ] || continue
-
-		if [ "$last" == "" ]
-		then
-			echo "### COPYING ###"
-			cp $path $outputDir/current.tsv
-		else
-			mergePeaks -d given $outputDir/current.tsv $path > $outputDir/merged.tsv
-			mv $outputDir/merged.tsv $outputDir/current.tsv
-			currentName+="|$basepath"
-		fi
-		last=$basepath
+		command+=" $path"
 	done
-	# annotate merged file with a column indicating peak origins
-	# python annotateMergedPeaks.py $outputDir/current.tsv $outputDir
+	command+=" >merged.tsv"
+	$command > $outputDir/merged.tsv
+	
+	# compute overlapping groups
+	echo "computing stats for overlapping groups"
+	python calcGroupStats.py $outputDir/merged.tsv > $outputDir/group_stats.tsv
 
 fi
 
