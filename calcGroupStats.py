@@ -58,7 +58,7 @@ print str(_numInGroup)+"\t"+str(_numPeaks)+"\t"+str(_avgSubPeaks)+"\t"+str(_avgS
 
 print "### PEAK ASSOCIATIONS ###"
 for key in groupHash:
-	toPrint = key
+	toPrint = key+"\t"
 	for peak in groupHash[key]:
 		toPrint += peak[0]+"\t"
 	print toPrint

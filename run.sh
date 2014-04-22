@@ -153,7 +153,6 @@ then
 	# compute overlapping groups
 	echo "computing stats for overlapping groups"
 	python calcGroupStats.py $outputDir/merged.tsv > $outputDir/group_stats.tsv
-
 fi
 
 ### conduct differential motif analysis on overlapping cistromes ###
@@ -163,3 +162,15 @@ echo "conducting differential motif analysis"
 fi
 
 
+echo $control
+echo "########"
+for path in $inputPath/*
+do
+	[ -f "${path}" ] || continue
+	echo ":$path:"
+	echo ":$control:"
+	if [ $path = $control ]
+	then
+		echo "CONTRO"
+	fi
+done
