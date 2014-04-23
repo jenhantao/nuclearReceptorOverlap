@@ -17,7 +17,7 @@ export updateTags=false
 export overlapDistance=200 # bp distance for calculating overlaps
 export mergeStrands=true # ignore strands when merging peaks
 # options for whether or not to run pipeline stages
-export makeUCSC=false
+export makeUCSC=true
 export findPeaks=false
 export findMotifs=false
 export annotatePeaks=false

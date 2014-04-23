@@ -53,7 +53,6 @@ then
 			command+="$path"
 		done
 		# run commands in the background
-		command+=" &"
 		echo $command
 		$($command)
 	fi
@@ -63,17 +62,19 @@ then
 		echo "finding peaks"
 		for path in $inputPath/*
 		do
-   			[ -d "${path}" ] || continue # if not a directory, skip
-			command="findPeaks "
-			command+=" "$path
-			command+=" -style factor -o $outputDir/$(basename ${path})_peaks.tsv"
-			if $useControl
+			if [ $path != $control ]
 			then
-				command+=" -i $control"
+				[ -d "${path}" ] || continue # if not a directory, skip
+				command="findPeaks "
+				command+=" "$path
+				command+=" -style factor -o $outputDir/$(basename ${path})_peaks.tsv"
+				if $useControl
+				then
+					command+=" -i $control"
+				fi
+				echo $command
+				$($command) > log.txt
 			fi
-			#command+=" &"
-			echo $command
-			$($command) > log.txt
 		done
 
 	fi
@@ -112,7 +113,6 @@ then
 			#command+=" $genome > ${outputDir}/${outPath}"
 			command+=" $genome"
 			echo $command
-
 			$($command > ${outputDir}/${outPath})
 		done
 
@@ -149,28 +149,25 @@ then
 	done
 	command+=" >merged.tsv"
 	$command > $outputDir/merged.tsv
+
+	# produce bed file for visualization for merged region
+	pos2bed.pl $outputDir/merged.tsv > $outputDir/peakfile.bed
+	
 	
 	# compute overlapping groups
 	echo "computing stats for overlapping groups"
 	python calcGroupStats.py $outputDir/merged.tsv > $outputDir/group_stats.tsv
+
+	# create different peak files for each group
+	python splitMergedPeaks.py $outputDir/merged.tsv $outputDir/group_stats.tsv $outputDir
+
 fi
 
 ### conduct differential motif analysis on overlapping cistromes ###
 if $stepThree
 then
 echo "conducting differential motif analysis"
+# conduct motif analysis for each group
 fi
 
 
-echo $control
-echo "########"
-for path in $inputPath/*
-do
-	[ -f "${path}" ] || continue
-	echo ":$path:"
-	echo ":$control:"
-	if [ $path = $control ]
-	then
-		echo "CONTRO"
-	fi
-done
