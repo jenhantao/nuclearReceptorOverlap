@@ -27,10 +27,11 @@ for i in range(len(data)):
 	line = data[i]
 	if not startedAssociations:
 		if "PEAK ASSOCIATIONS" in line:
-			startedPeakAssociations = True
-		else:
-			tokens = lines.split("\t")
-			groupIDHash[tokens[0]] = tokens[1:]
+			startedAssociations = True
+	else:
+		print line
+		tokens = line.strip().split("\t")
+		groupIDHash[tokens[0]] = tokens[1:]
 
 # write peak file for each group
 groupFileNameHash = {} # key: group name, value: file name for the peak file for that group
@@ -40,9 +41,9 @@ for group in sorted(groupIDHash.keys()):
 	groupFileNameHash[group] = fileName
 	count += 1
 	outFile = open(outputDirectory+"/"+fileName,"w")
-	outFile.write("Peak ID\tchr\tstart\tend\tStat\n")
-	for line in groupIDHash[group]
-		outFile.write(line)
+	outFile.write("Peak ID\tchr\tstart\tend\tStrand\tStat\n")
+	for id in groupIDHash[group]:
+		outFile.write(peakIdLineHash[id])
 	outFile.close()
 
 # write filename group mapping as a tsv
