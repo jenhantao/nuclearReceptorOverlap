@@ -14,14 +14,14 @@ for line in data[1:]:
 	stat = float(tokens[5])
 	parentString = tokens[6]
 	numPeaks = int(tokens[7])
-	parentArray = parentString.strip().replace(path,"").split("|")
+	parentArray = parentString.strip().replace(path,"").replace("_ext.tsv","").split("|")
 	peak = (id, stat, numPeaks)
 	if len(parentArray)> 1:	
-		parentString
-		if not str(parentArray) in groupHash:
-			groupHash[str(parentArray)] = [peak]
+		key  = str(parentArray).replace("'","")
+		if not key in groupHash:
+			groupHash[key] = [peak]
 		else:
-			groupHash[str(parentArray)].append(peak)
+			groupHash[key].append(peak)
 
 _numInGroup = 0
 _numPeaks = 0

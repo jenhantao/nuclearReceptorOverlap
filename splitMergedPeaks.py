@@ -29,7 +29,6 @@ for i in range(len(data)):
 		if "PEAK ASSOCIATIONS" in line:
 			startedAssociations = True
 	else:
-		print line
 		tokens = line.strip().split("\t")
 		groupIDHash[tokens[0]] = tokens[1:]
 

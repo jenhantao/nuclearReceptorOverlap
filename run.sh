@@ -161,6 +161,11 @@ then
 	# create different peak files for each group
 	python splitMergedPeaks.py $outputDir/merged.tsv $outputDir/group_stats.tsv $outputDir
 
+	# create a graph visualizing the connectivity of the groups
+	python createGraph.py $outputDir/group_stats.tsv > $outputDir/graph_peak.txt
+	circo -Tpng $outputDir/graph_peak.txt > $outputDir/graph_peak.png
+	python createGraph.py $outputDir/group_stats.tsv
+
 fi
 
 ### conduct differential motif analysis on overlapping cistromes ###
@@ -168,6 +173,20 @@ if $stepThree
 then
 echo "conducting differential motif analysis"
 # conduct motif analysis for each group
+for path in $outputDir/groupPeaks_*.tsv
+do
+	[ -f "${path}" ] || continue
+	command="findMotifsGenome.pl "
+	command+=" "$path
+	# run commands in the background
+	outPath=$path
+	outPath=${outPath%_peaks.tsv}
+	outPath=${outPath##*/}_motifs
+	command+=" $genome ${outputDir}/${outPath}"
+	echo $command
+	$($command)
+done
+
 fi
 
 
