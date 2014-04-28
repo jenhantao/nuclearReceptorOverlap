@@ -5,15 +5,15 @@ source config.sh
 
 # define input variables
 inputPath=$1 # path to directory containing all tag directories
-stepOne=$2 # run basic analysis for each tag directory
-stepTwo=$3 # mege peaks and look for overlapping cistromes
+outputDir=$2 # path to the output directory
+stepOne=$3 # run basic analysis for each tag directory
+stepTwo=$4 # mege peaks and look for overlapping cistromes
 stepThree=$4 # conduct differential motif analysis on overlapping cistromes
 
 if [ ! -d $outputDir ]
 then
 mkdir $outputDir
 fi
-unset IFS
 
 
 
@@ -48,36 +48,63 @@ then
 		for path in $inputPath/*
 		do
    			[ -d "${path}" ] || continue # if not a directory, skip
-			command+=" "
-			# append tag directory to command
-			command+="$path"
+			# skip directories that contain input
+			if [[ ! $path  =~ .*[iI]{1}nput.* ]]
+			then
+				if [[ $(basename $path) =~ ^[0-9]-.* ]]
+				then
+					command+=" "
+					# append tag directory to command
+					command+="$path"
+				fi
+			fi
 		done
 		# run commands in the background
-		echo $command
+		echo "$command"
 		$($command)
 	fi
 	#Peak finding / Transcript detection / Feature identification (findPeaks)
 	if $findPeaks 
 	then
 		echo "finding peaks"
+	
+		fileHeadings=()
 		for path in $inputPath/*
 		do
-			if [ $path != $control ]
+			[ -d "${path}" ] || continue # if not a directory, skip
+			basepath=$(basename $path)
+			if [[ $basepath =~ ^[0-9]-.* ]]; 
 			then
-				[ -d "${path}" ] || continue # if not a directory, skip
+				fileHeadings+=(${basepath%%-*})
+			fi          
+		done
+		# get the list of unique headings
+		uniqueHeadings=($(for v in "${fileHeadings[@]}"; do echo "$v";done| sort| uniq| xargs))
+		for heading in ${uniqueHeadings[@]}
+		do
+			files=( $(find $inputPath/$heading* -maxdepth 0) )
+			control=''
+			actual=''
+			if [[ ${files[0]} =~ .*[iI]{1}nput.* ]]
+			then
+				control=${files[0]}
+				actual=${files[1]}
+			else
+				control=${files[1]}
+				actual=${files[0]}
+			fi  
 				command="findPeaks "
-				command+=" "$path
-				command+=" -style factor -o $outputDir/$(basename ${path})_peaks.tsv"
+				command+=" "$actual
+				command+=" -style factor -o $outputDir/$(basename ${actual})_peaks.tsv"
 				if $useControl
 				then
 					command+=" -i $control"
 				fi
 				echo $command
-				$($command) > log.txt
-			fi
+				$($command)
 		done
-
 	fi
+
 	#Motif analysis (findMotifsGenome.pl)
 	if $findMotifs
 	then
@@ -180,7 +207,7 @@ do
 	command+=" "$path
 	# run commands in the background
 	outPath=$path
-	outPath=${outPath%_peaks.tsv}
+	outPath=${outPath%.tsv}
 	outPath=${outPath##*/}_motifs
 	command+=" $genome ${outputDir}/${outPath}"
 	echo $command
