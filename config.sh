@@ -18,6 +18,6 @@ export overlapDistance=200 # bp distance for calculating overlaps
 # options for whether or not to run pipeline stages
 export makeUCSC=true
 export findPeaks=true
-export findMotifs=true
+export findMotifs=false
 export annotatePeaks=true
 export quantifyPeaks=true
