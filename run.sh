@@ -8,7 +8,7 @@ inputPath=$1 # path to directory containing all tag directories
 outputDir=$2 # path to the output directory
 stepOne=$3 # run basic analysis for each tag directory
 stepTwo=$4 # mege peaks and look for overlapping cistromes
-stepThree=$4 # conduct differential motif analysis on overlapping cistromes
+stepThree=$5 # conduct differential motif analysis on overlapping cistromes
 
 if [ ! -d $outputDir ]
 then
@@ -59,7 +59,6 @@ then
 				fi
 			fi
 		done
-		# run commands in the background
 		echo "$command"
 		$($command)
 	fi
@@ -174,45 +173,74 @@ then
 	do
 		command+=" $path"
 	done
-	command+=" >merged.tsv"
-	$command > $outputDir/merged.tsv
+	echo $command
+	$command > ${outputDir}/merged.tsv
 
 	# produce bed file for visualization for merged region
 	pos2bed.pl $outputDir/merged.tsv > $outputDir/peakfile.bed
-	
+
+	# find motifs for merged regions
+	if $findMotifs
+	then	
+		findMotifsGenome.pl $outputDir/merged.tsv mm9 $outputDir/mergedMotifs/ -size 200
+	fi
+	# annotate merged regions with all tag directories and all motifs
+	command="annotatePeaks.pl $outputDir/merged.tsv mm9 -size 200 -d"
+	for path in $inputPath/*
+	do
+		[ -d "${path}" ] || continue # if not a directory, skip
+		# skip directories that contain input
+		if [[ ! $path  =~ .*[iI]{1}nput.* ]]
+		then
+			# consider only files tagged with a number at the front
+			if [[ $(basename $path) =~ ^[0-9]-.* ]]
+			then
+				command+=" "
+				# append tag directory to command
+				command+="$path"
+			fi
+		fi
+	done
+	command+=" -m $outputDir/mergedMotifs/homerMotifs.all.motifs"
+	echo $command
+	$command > $outputDir/merged_annotated.tsv
 	
 	# compute overlapping groups
 	echo "computing stats for overlapping groups"
 	python calcGroupStats.py $outputDir/merged.tsv > $outputDir/group_stats.tsv
 
 	# create different peak files for each group
-	python splitMergedPeaks.py $outputDir/merged.tsv $outputDir/group_stats.tsv $outputDir
+	python splitMergedPeaks.py $outputDir/merged_annotated.tsv $outputDir/group_stats.tsv $outputDir
+
+	# create a graph visualizing the hierarchy of the groups
+	python createHierarchyTree.py $outputDir/group_stats.tsv >$outputDir/hierarchy.txt
+	neato -Tpng $outputDir/hierarchy.txt > $outputDir/hierarchy.png
 
 	# create a graph visualizing the connectivity of the groups
-	python createGraph.py $outputDir/group_stats.tsv > $outputDir/graph_peak.txt
+	python createPeakGraph.py $outputDir/group_stats.tsv > $outputDir/graph_peak.txt
 	circo -Tpng $outputDir/graph_peak.txt > $outputDir/graph_peak.png
-	python createGraph.py $outputDir/group_stats.tsv
 
 fi
 
 ### conduct differential motif analysis on overlapping cistromes ###
 if $stepThree
 then
-echo "conducting differential motif analysis"
+echo "conducting motif analysis"
+# this step would be quite slow
 # conduct motif analysis for each group
-for path in $outputDir/groupPeaks_*.tsv
-do
-	[ -f "${path}" ] || continue
-	command="findMotifsGenome.pl "
-	command+=" "$path
-	# run commands in the background
-	outPath=$path
-	outPath=${outPath%.tsv}
-	outPath=${outPath##*/}_motifs
-	command+=" $genome ${outputDir}/${outPath}"
-	echo $command
-	$($command)
-done
+#for path in $outputDir/groupPeaks_*.tsv
+#do
+#	[ -f "${path}" ] || continue
+#	command="findMotifsGenome.pl "
+#	command+=" "$path
+#	# run commands in the background
+#	outPath=$path
+#	outPath=${outPath%.tsv}
+#	outPath=${outPath##*/}_motifs
+#	command+=" $genome ${outputDir}/${outPath}"
+#	echo $command
+#	$($command)
+#done
 
 fi
 
