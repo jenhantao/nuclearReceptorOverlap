@@ -40,7 +40,7 @@ for group in sorted(groupIDHash.keys()):
 	groupFileNameHash[group] = fileName
 	count += 1
 	outFile = open(outputDirectory+"/"+fileName,"w")
-	outFile.write("Peak ID\tchr\tstart\tend\tStrand\tStat\n")
+	outFile.write("Peak ID\tchr\tstart\tend\tStrand\tAverage Peak Score\tParent Files\tAnnotation\tDetailed Annotation\tDistance to TSS\tNearest PromoterID\tEntrez ID\tNearest Unigene\tNearest Refseq\tNearest Ensembl\tGene Name\tGene Alias\tGene Description\tGene Type\tCpG%\tGC%\n")
 	for id in groupIDHash[group]:
 		outFile.write(peakIdLineHash[id])
 	outFile.close()
