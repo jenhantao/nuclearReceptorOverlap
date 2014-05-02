@@ -14,6 +14,12 @@ class Node:
 		self.level = -1
 		self.name = name
 
+def convertName(indexHash, components):
+	compList = sorted(list(components))
+	toReturn = []
+	for comp in compList:
+		toReturn.append(indexHash[comp])
+	return " ".join(toReturn)
 
 maxPenWidth = 10
 
@@ -23,17 +29,24 @@ with open(groupStatsFilePath) as f:
 	data = f.readlines()
 
 groupComponentsHash = {} # key: group name - individual factors count as groups, value: set of factors comprising that group
+factors = set()
 for line in data[2:]:
 	if "###" in line:
 		break
 	tokens = line.strip().split("\t")
 	group = tokens[0]
 	groupTokens = set(group[1:-1].split(", "))
-	groupComponentsHash[group] = groupTokens
+	gr;dlkfjasldfjoupComponentsHash[group] = groupTokens
 	# add in individual factors
 	for token in groupTokens:
 		if not token in groupComponentsHash:
 			groupComponentsHash[token] = set([token])
+		factors.add(token)
+factorIndexHash = {}
+counter = 1
+for factor in sorted(list(factors)):
+	factorIndexHash[factor] = str(counter)
+	counter += 1
 # sort groups according to number of components in group
 groupArray = [] 
 groupIndexHash = {}
@@ -126,6 +139,7 @@ while queue:
 		if not neighbor in seen and not (current,neighbor) in pairSet:
 			queue.append(neighbor)
 			print '"'+groupIndexHash[current.name]+'|'+str(len(current.components))+'|'+str(current.level)+'" -- "'+groupIndexHash[neighbor.name]+'|'+str(len(neighbor.components))+'|'+str(neighbor.level)+'"'
+			print '"'+convertName(factorIndexHash, current.components)+'|'+str(len(current.components))+'|'+str(current.level)+'" -- "'+convertName(factorIndexHash, neighbor.components)+'|'+str(len(neighbor.components))+'|'+str(neighbor.level)+'"'
 			pairSet.add((current,neighbor))
 			
 
