@@ -43,6 +43,7 @@ for key in groupComponentsHash:
 	groupIndexHash[key] = str(counter)
 	counter += 1
 groupArray.sort(key=lambda x: (x[1],x[0]))
+groupArray.reverse()
 groupIndexHash["Root"] = "Root"
 
 # create initial graph
@@ -53,34 +54,34 @@ root.level = 0
 groupNodeHash = {} # key: group name, value: node
 
 endIndex = len(groupArray)
-for i in range(len(groupArray)-1):
-	for j in range(i+1, len(groupArray)):
-		childName = groupArray[i][0]
-		parentName = groupArray[j][0]
-		# create new nodes if necessary
-		if not childName in groupNodeHash:
-			newNode = Node(childName)
-			newNode.components = groupComponentsHash[childName]
-			groupNodeHash[childName] = newNode
-		child = groupNodeHash[childName]
-		if not parentName in groupNodeHash:
-			newNode = Node(parentName)
-			newNode.components = groupComponentsHash[parentName]
-			groupNodeHash[parentName] = newNode
-		parent = groupNodeHash[parentName]
-		if (len(parent.components & child.components) == len(child.components)):
-			child.parent = parent
-			parent.neighbors.append(child)
-			break
-		elif j == endIndex-1:
-			root.neighbors.append(child)
-			child.parent=root
-# connect largest element to root
-largest = groupNodeHash[groupArray[-1][0]]
-root.neighbors.append(largest)
-largest.parent = root
-
-# traverse graph and assign levels
+for i in range(len(groupArray)):
+	parentName= groupArray[i][0]
+	if not parentName in groupNodeHash:
+		newNode = Node(parentName)
+		newNode.components = groupComponentsHash[parentName]
+		groupNodeHash[parentName] = newNode
+	parent = groupNodeHash[parentName]
+	uncoveredComponents = parent.components.copy()
+	for j in range(len(groupArray)):
+		if not i==j:
+			childName = groupArray[j][0]
+			# create new nodes if necessary
+			if not childName in groupNodeHash:
+				newNode = Node(childName)
+				newNode.components = groupComponentsHash[childName]
+				groupNodeHash[childName] = newNode
+			child = groupNodeHash[childName]
+			if (len(parent.components & child.components) == len(child.components)):
+				child.parent = parent
+				parent.neighbors.append(child)
+				uncoveredComponents = uncoveredComponents - child.components	
+				if not uncoveredComponents:
+					break
+for node in groupNodeHash.values():
+	if node.parent == None and not node == root:
+		node.parent = root
+		root.neighbors.append(node)
+## traverse graph and assign levels
 nodeLevelHash = {0:[root]} # key: level, value: array of all nodes in that level
 queue = [root]
 while queue:
@@ -95,15 +96,15 @@ while queue:
 	for neighbor in current.neighbors:
 		queue.append(neighbor)
 
-# create additional links between neighboring levels
-numLevel = len(nodeLevelHash.keys())
-for lowerLevel in range(numLevel-1):
-	upperLevel = lowerLevel + 1
-	for upper in nodeLevelHash[upperLevel]:
-		for lower in nodeLevelHash[lowerLevel]:
-			if not upper in lower.neighbors:
-				if (len(lower.components & upper.components) == len(upper.components)):
-					lower.neighbors.append(upper)
+## create additional links between neighboring levels
+#numLevel = len(nodeLevelHash.keys())
+#for lowerLevel in range(numLevel-1):
+#	upperLevel = lowerLevel + 1
+#	for upper in nodeLevelHash[upperLevel]:
+#		for lower in nodeLevelHash[lowerLevel]:
+#			if not upper in lower.neighbors:
+#				if (len(lower.components & upper.components) == len(upper.components)):
+#					lower.neighbors.append(upper)
 			
 
 
