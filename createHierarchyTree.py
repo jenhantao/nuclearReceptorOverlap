@@ -41,9 +41,9 @@ for line in data[2:]:
 	groupComponentsHash[group] = groupTokens
 	# add in individual factors
 	for token in groupTokens:
-		if not token in groupComponentsHash:
-			groupComponentsHash[token] = set([token])
-			groupPeaksHash[token] = 0 # fix this value later
+		#if not token in groupComponentsHash:
+			#groupComponentsHash[token] = set([token])
+			#groupPeaksHash[token] = 0 # fix this value later
 		factors.add(token)
 factorIndexHash = {}
 counter = 1
@@ -122,7 +122,7 @@ while queue:
 #generate graphviz file
 print "graph {"
 print "ratio=1.0"
-print "dpi=50"
+#print "dpi=50"
 # create legend
 print "{ rank = sink"
 print "Legend[shape=none, margine=0, label =<"
@@ -146,7 +146,7 @@ while queue:
 			queue.append(neighbor)
 			#print '"'+groupIndexHash[current.name]+'|'+str(len(current.components))+'|'+str(current.level)+'" -- "'+groupIndexHash[neighbor.name]+'|'+str(len(neighbor.components))+'|'+str(neighbor.level)+'"'
 			#print '"'+convertName(factorIndexHash, current.components)+'|'+str(len(current.components))+'|'+str(current.level)+'" -- "'+convertName(factorIndexHash, neighbor.components)+'|'+str(len(neighbor.components))+'|'+str(neighbor.level)+'"'
-			print '"'+convertName(factorIndexHash, current.components)+'\n'+str(groupPeaksHash[current.name])+ '"  -- "'+convertName(factorIndexHash, neighbor.components)+'\n'+str(groupPeaksHash[neighbor.name])+'"'
+			print '"'+convertName(factorIndexHash, current.components)+'|'+str(groupPeaksHash[current.name])+ '" -- "'+convertName(factorIndexHash, neighbor.components)+'|'+str(groupPeaksHash[neighbor.name])+'"'
 			pairSet.add((current,neighbor))
 			
 

@@ -2,6 +2,7 @@
 
 ### imports ###
 import sys
+import re
 
 with open(sys.argv[1]) as f:
 	data = f.readlines()
@@ -16,12 +17,24 @@ for line in data[1:]:
 	numPeaks = int(tokens[7])
 	parentArray = parentString.strip().replace(path,"").replace("_ext.tsv","").split("|")
 	peak = (id, stat, numPeaks)
-	if len(parentArray)> 1:	
+	if len(parentArray)> 0:	
 		key  = str(parentArray).replace("'","")
 		if not key in groupHash:
 			groupHash[key] = [peak]
 		else:
 			groupHash[key].append(peak)
+
+#with open(sys.argv[2]) as f:
+#	data = f.readlines()
+#motifPattern = re.compile("^[+-]*[0-9]+\([ACTGactg]+.*\)")
+#groupMotifCountHash = {} # key: group, value: number of motifs in group
+#for line in data[1:]:
+#	tokens = line.strip().split("\t")
+#	id = tokens[0]
+#	filteredTokens = [x for x in tokens if motifPattern.match(x)]
+#	parentString = tokens[6]
+#	parentArray = parentString.strip().replace(path,"").replace("_ext.tsv","").split("|")
+#	key  = str(parentArray).replace("'","")
 
 _numInGroup = 0
 _numPeaks = 0

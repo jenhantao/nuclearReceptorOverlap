@@ -13,7 +13,7 @@ export hub="tao"
 export genome="mm9"
 export control="/data/mm9/ThioMac/ChIP/NuclearReceptors/NURSA_njs/NR-BLRP-Nathan/BLRP-Nathan-old/BirA-input-Nathan"
 export useControl=true
-export updateTags=true
+export updateTags=false
 export overlapDistance=200 # bp distance for calculating overlaps
 # options for whether or not to run pipeline stages
 export makeUCSC=true

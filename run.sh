@@ -207,14 +207,14 @@ then
 	
 	# compute overlapping groups
 	echo "computing stats for overlapping groups"
-	python calcGroupStats.py $outputDir/merged.tsv > $outputDir/group_stats.tsv
+	python calcGroupStats.py $outputDir/merged.tsv $outputDir/merged_annotated.tsv> $outputDir/group_stats.tsv
 
 	# create different peak files for each group
 	python splitMergedPeaks.py $outputDir/merged_annotated.tsv $outputDir/group_stats.tsv $outputDir
 
 	# create a graph visualizing the hierarchy of the groups
 	python createHierarchyTree.py $outputDir/group_stats.tsv >$outputDir/hierarchy.txt
-	neato -Tpng $outputDir/hierarchy.txt > $outputDir/hierarchy.png
+	dot -Tpng $outputDir/hierarchy.txt > $outputDir/hierarchy.png
 
 	# create a graph visualizing the connectivity of the groups
 	python createPeakGraph.py $outputDir/group_stats.tsv > $outputDir/graph_peak.txt
