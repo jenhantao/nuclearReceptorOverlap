@@ -19,7 +19,7 @@ def convertName(indexHash, components):
 	toReturn = []
 	for comp in compList:
 		toReturn.append(indexHash[comp])
-	return " ".join(toReturn)
+	return " ".join(sorted(toReturn))
 
 maxPenWidth = 10
 
@@ -30,17 +30,20 @@ with open(groupStatsFilePath) as f:
 
 groupComponentsHash = {} # key: group name - individual factors count as groups, value: set of factors comprising that group
 factors = set()
+groupPeaksHash = {}
 for line in data[2:]:
 	if "###" in line:
 		break
 	tokens = line.strip().split("\t")
 	group = tokens[0]
+	groupPeaksHash[group] = int(tokens[2])
 	groupTokens = set(group[1:-1].split(", "))
-	gr;dlkfjasldfjoupComponentsHash[group] = groupTokens
+	groupComponentsHash[group] = groupTokens
 	# add in individual factors
 	for token in groupTokens:
 		if not token in groupComponentsHash:
 			groupComponentsHash[token] = set([token])
+			groupPeaksHash[token] = 0 # fix this value later
 		factors.add(token)
 factorIndexHash = {}
 counter = 1
@@ -58,6 +61,7 @@ for key in groupComponentsHash:
 groupArray.sort(key=lambda x: (x[1],x[0]))
 groupArray.reverse()
 groupIndexHash["Root"] = "Root"
+groupPeaksHash["Root"] = sum(groupPeaksHash.values())
 
 # create initial graph
 # create root node
@@ -74,7 +78,8 @@ for i in range(len(groupArray)):
 		newNode.components = groupComponentsHash[parentName]
 		groupNodeHash[parentName] = newNode
 	parent = groupNodeHash[parentName]
-	uncoveredComponents = parent.components.copy()
+	componentsToCover = parent.components.copy()
+	slack = 1 # difference between the size of the parent an the size of the child
 	for j in range(len(groupArray)):
 		if not i==j:
 			childName = groupArray[j][0]
@@ -84,12 +89,17 @@ for i in range(len(groupArray)):
 				newNode.components = groupComponentsHash[childName]
 				groupNodeHash[childName] = newNode
 			child = groupNodeHash[childName]
-			if (len(parent.components & child.components) == len(child.components)):
-				child.parent = parent
-				parent.neighbors.append(child)
-				uncoveredComponents = uncoveredComponents - child.components	
-				if not uncoveredComponents:
+			if len(parent.components) == len(child.components)+slack:
+				if len(parent.components & child.components) == len(child.components):
+					componentsToCover = componentsToCover - child.components
+					child.parent = parent
+					parent.neighbors.append(child)
+			elif len(parent.components) == len(child.components)+slack+1:
+				if not componentsToCover:
 					break
+				else:
+					slack += 1
+
 for node in groupNodeHash.values():
 	if node.parent == None and not node == root:
 		node.parent = root
@@ -109,22 +119,18 @@ while queue:
 	for neighbor in current.neighbors:
 		queue.append(neighbor)
 
-## create additional links between neighboring levels
-#numLevel = len(nodeLevelHash.keys())
-#for lowerLevel in range(numLevel-1):
-#	upperLevel = lowerLevel + 1
-#	for upper in nodeLevelHash[upperLevel]:
-#		for lower in nodeLevelHash[lowerLevel]:
-#			if not upper in lower.neighbors:
-#				if (len(lower.components & upper.components) == len(upper.components)):
-#					lower.neighbors.append(upper)
-			
-
-
-
 #generate graphviz file
 print "graph {"
 print "ratio=1.0"
+print "dpi=50"
+# create legend
+print "{ rank = sink"
+print "Legend[shape=none, margine=0, label =<"
+print '<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">'
+for factor in sorted(factorIndexHash.keys()):
+	print "<TR><TD>"+factor+"</TD><TD>"+factorIndexHash[factor]+"</TD></TR>"
+print "</TABLE>>]"
+print "}"
 
 queue = [root]
 seen = set()
@@ -138,8 +144,9 @@ while queue:
 	for neighbor in current.neighbors:
 		if not neighbor in seen and not (current,neighbor) in pairSet:
 			queue.append(neighbor)
-			print '"'+groupIndexHash[current.name]+'|'+str(len(current.components))+'|'+str(current.level)+'" -- "'+groupIndexHash[neighbor.name]+'|'+str(len(neighbor.components))+'|'+str(neighbor.level)+'"'
-			print '"'+convertName(factorIndexHash, current.components)+'|'+str(len(current.components))+'|'+str(current.level)+'" -- "'+convertName(factorIndexHash, neighbor.components)+'|'+str(len(neighbor.components))+'|'+str(neighbor.level)+'"'
+			#print '"'+groupIndexHash[current.name]+'|'+str(len(current.components))+'|'+str(current.level)+'" -- "'+groupIndexHash[neighbor.name]+'|'+str(len(neighbor.components))+'|'+str(neighbor.level)+'"'
+			#print '"'+convertName(factorIndexHash, current.components)+'|'+str(len(current.components))+'|'+str(current.level)+'" -- "'+convertName(factorIndexHash, neighbor.components)+'|'+str(len(neighbor.components))+'|'+str(neighbor.level)+'"'
+			print '"'+convertName(factorIndexHash, current.components)+'\n'+str(groupPeaksHash[current.name])+ '"  -- "'+convertName(factorIndexHash, neighbor.components)+'\n'+str(groupPeaksHash[neighbor.name])+'"'
 			pairSet.add((current,neighbor))
 			
 
