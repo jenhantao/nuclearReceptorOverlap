@@ -23,6 +23,7 @@ with open(statFilePath) as f:
 groupIDHash = {} # key: group name, value: array containing all peak ids
 # get groups
 startedAssociations = False
+factors = set()
 for i in range(len(data)):
 	line = data[i]
 	if not startedAssociations:
@@ -31,6 +32,7 @@ for i in range(len(data)):
 	else:
 		tokens = line.strip().split("\t")
 		groupIDHash[tokens[0]] = tokens[1:]
+		factors = factors | set(tokens[0][1:-1].split(", "))
 
 # write peak file for each group
 groupFileNameHash = {} # key: group name, value: file name for the peak file for that group
@@ -50,6 +52,16 @@ mappingFile = open(outputDirectory+"/groupPeakFileMapping.tsv","w")
 mappingFile.write("Group Name\tPeak File Name\n")
 for group in sorted(groupIDHash.keys()):
 	mappingFile.write(group+"\t"+groupFileNameHash[group]+"\n")
+mappingFile.close
+
+# write numeric factor shorthand to factor mapping as a tssv
+mappingFile = open(outputDirectory+"/factorIndexMapping.tsv","w")
+mappingFile.write("Factor Name\tIndex\n")
+counter = 1
+for group in sorted(list(factors)):
+	mappingFile.write(group+"\t"+str(counter)+"\n")
+	counter += 1
+mappingFile.close()
 mappingFile.close
 
 	
