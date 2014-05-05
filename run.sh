@@ -210,7 +210,21 @@ then
 	python calcGroupStats.py $outputDir/merged.tsv $outputDir/merged_annotated.tsv> $outputDir/group_stats.tsv
 
 	# create different peak files for each group
-	python splitMergedPeaks.py $outputDir/merged_annotated.tsv $outputDir/group_stats.tsv $outputDir
+	rm -rf $outputDir/splitPeaks
+	mkdir $outputDir/splitPeaks
+	python splitMergedPeaks.py $outputDir/merged_annotated.tsv $outputDir/group_stats.tsv $outputDir/splitPeaks
+
+	# create bed files for each split group file
+	for path in $outputDir/splitPeaks/groupPeaks*.tsv
+	do
+		[ -f "${path}" ] || continue
+		outpath=$(basename $path)
+		outpath=${outpath##groupPeaks}
+		outpath=${outpath%%tsv}
+		outpath="group${outpath}bed"
+		python annotatedPeak2Bed.py $path > $outputDir/splitPeaks/$outpath
+		
+	done
 
 	# create a graph visualizing the hierarchy of the groups
 	python createHierarchyTree.py $outputDir/group_stats.tsv >$outputDir/hierarchy.txt

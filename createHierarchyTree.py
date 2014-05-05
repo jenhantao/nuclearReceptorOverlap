@@ -37,9 +37,6 @@ def createGraph(groupStatsFilePath):
 		groupComponentsHash[group] = groupTokens
 		# add in individual factors
 		for token in groupTokens:
-			#if not token in groupComponentsHash:
-				#groupComponentsHash[token] = set([token])
-				#groupPeaksHash[token] = 0 # fix this value later
 			factors.add(token)
 	factorIndexHash = {}
 	counter = 1
