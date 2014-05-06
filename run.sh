@@ -66,6 +66,8 @@ then
 	if $findPeaks 
 	then
 		echo "finding peaks"
+		rm -rf $outputDir/inputPeaks
+		mkdir $outputDir/inputPeaks
 	
 		fileHeadings=()
 		for path in $inputPath/*
@@ -101,6 +103,9 @@ then
 				fi
 				echo $command
 				$($command)
+				inputCommand="findPeaks $control -style factor -o $outputDir/inputPeaks/$(basename ${control})_peaks.tsv"
+				echo $inputCommand
+				$($inputCommand)
 		done
 	fi
 
