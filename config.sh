@@ -11,13 +11,13 @@ export home="/data/home/jtao/"
 #UCSC visualization (makeUCSCfile, makeBigWig.pl)
 export hub="tao"
 export genome="mm9"
-export control="/data/mm9/ThioMac/ChIP/NuclearReceptors/NURSA_njs/NR-BLRP-Nathan/BLRP-Nathan-old/BirA-input-Nathan"
+export generalInput="~/background_test/standardInputPeaks.tsv"
 export useControl=true
 export updateTags=false
 export overlapDistance=200 # bp distance for calculating overlaps
 # options for whether or not to run pipeline stages
-export makeUCSC=true
+export makeUCSC=false
 export findPeaks=true
 export findMotifs=false
-export annotatePeaks=true
-export quantifyPeaks=true
+export annotatePeaks=false
+export quantifyPeaks=false
