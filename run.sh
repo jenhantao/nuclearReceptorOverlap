@@ -113,7 +113,7 @@ then
 	if $findMotifs
 	then
 		echo "finding motifs"
-		for path in $outputDir/*tsv
+		for path in $outputDir/*_peaks.tsv
 		do
    			[ -f "${path}" ] || continue
 			command="findMotifsGenome.pl "
