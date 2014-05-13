@@ -21,3 +21,4 @@ export findPeaks=true
 export findMotifs=false
 export annotatePeaks=false
 export quantifyPeaks=false
+export cluster=false
