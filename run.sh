@@ -113,6 +113,7 @@ then
 	if $findMotifs
 	then
 		echo "finding motifs"
+		mkdir $outputDir/factorMotifs
 		for path in $outputDir/*_peaks.tsv
 		do
    			[ -f "${path}" ] || continue
@@ -122,7 +123,7 @@ then
 			outPath=$path
 			outPath=${outPath%_peaks.tsv}
 			outPath=${outPath##*/}_motifs
-			command+=" $genome ${outputDir}/${outPath}"
+			command+=" $genome ${outputDir}/factorMotifs/${outPath}"
 			echo $command
 			$($command)
 		done
@@ -244,23 +245,57 @@ fi
 ### conduct differential motif analysis on overlapping cistromes ###
 if $stepThree
 then
-echo "conducting motif analysis"
-# this step would be quite slow
-# conduct motif analysis for each group
-#for path in $outputDir/groupPeaks_*.tsv
-#do
-#	[ -f "${path}" ] || continue
-#	command="findMotifsGenome.pl "
-#	command+=" "$path
-#	# run commands in the background
-#	outPath=$path
-#	outPath=${outPath%.tsv}
-#	outPath=${outPath##*/}_motifs
-#	command+=" $genome ${outputDir}/${outPath}"
-#	echo $command
-#	$($command)
-#done
+	echo "conducting motif analysis"
+	# finding the motifs can take a while - this should only be done on a computing cluster with qsub installed
+	if $cluster
+	then
+		# try Homer default
+		for path in $inputPath/groupPeaks_*.tsv
+		do
+			command="findMotifsGenome.pl " 
+			command+=" "$path 
+			outPath=$path 
+			outPath=${outPath%.tsv} 
+			outPath=${outPath##*/}_default_motifs 
+			command+=" $genome ${outputDir}/${outPath}" 
+			# create qsub file
+			cp qsub_stub.sh $outputDir/qsub_script.sh
+			echo $command >> $outputDir/qsub_script.sh
+			qsub $outputDir/qsub_script.sh
+			rm $outputDir/qsub_script.sh
+			
+		done
 
-fi
+		# try suggested input
+		for path in $outputDir/groupPeaks_*.tsv
+		do
+			if [ -f $outputDir/filteredInput.tsv ]
+			then
+				rm $outputDir/filteredInput.tsv
+			fi
+			groupNumber=$(basename $path)
+			groupNumber=${groupNumber##groupPeaks_}
+			groupNumber=${groupNumber%%.tsv}
+			pythonCommand="python removeOverlapsFromPeakFile.py $outputDir/standardInputPeaks.tsv $path > $outputDir/filteredInput_${groupNumber}.tsv; "
+			python removeOverlapsFromPeakFile.py $outputDir/standardInputPeaks.tsv $path > $outputDir/filteredInput_${groupNumber}.tsv
+			command="findMotifsGenome.pl " 
+			command+=" "$path 
+			outPath=$path 
+			outPath=${outPath%.tsv} 
+			outPath=${outPath##*/}_suggestedInput_motifs
+			command+=" mm9 ${outputDir}/${outPath}" 
+			command+=" -bg $outputDir/filteredInput_${groupNumber}.tsv -size 200"
+			findMotifsGenome.pl $path $genome ${outputDir}/${outPath} -bg $outputDir/filteredInput_${groupNumber}.tsv -size 200
+			# create qsub file
+			cp qsub_stub.sh $outputDir/qsub_script.sh
+			echo $pythonCommand >> $outputDir/qsub_script.sh
+			echo $command >> $outputDir/qsub_script.sh
+			qsub $outputDir/qsub_script.sh
+			rm $outputDir/qsub_script.sh
+			
+		done
+
+		
+	fi
 
 
