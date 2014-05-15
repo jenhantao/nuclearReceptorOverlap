@@ -8,7 +8,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
-def createSummaryPlots(inputPath,outPath):
+def createPeakSummaryPlots(inputPath,outPath):
 	# read in inputs
         with open(inputPath) as f:
                 data = f.readlines()
@@ -72,21 +72,6 @@ def createSummaryPlots(inputPath,outPath):
 	plt.title("Factors vs Number of Ocurrences in a Group")
 	plt.savefig(outPath+"factors_vs_groupOcurrence.png")
 	plt.close()
-	
-	# plot the number of times a factor appears in a group (weighted by the number of merged regions)
-#	factorList = []
-#	for factor in factorFrequencyHash:
-#		factorList.append((factor, factorFrequencyHash[factor]))
-#	factorList.sort(key=lambda x: (x[1],x[0]))
-#	factorLabels = [x[0] for x in factorList]
-#	factorFrequencies = [x[1] for x in factorList]
-#	plt.bar(range(len(factorFrequencies)),factorFrequencies)
-#	plt.ylabel("Number of Groups")
-#	plt.xlabel("Factor")
-#	plt.xticks(range(len(factorLabels)), factorLabels, rotation=90,fontsize=8)
-#	plt.title("Factors vs Number of Ocurrences in a Group")
-#	plt.savefig(outPath+"factors_vs_groupOcurrence.png")
-#	plt.close()
 
 	# plot the size of a group vs the number of merged regions
 	groupList = []
@@ -102,7 +87,12 @@ def createSummaryPlots(inputPath,outPath):
 	plt.savefig(outPath+"numFactors_vs_numPeaks.png")
 	plt.close()
 
+def createMotifSummaryPlots(inputPath, outputPath):
+	# read in input
+	
+
 	
 
 if __name__ == "__main__":
-	createSummaryPlots(sys.argv[1],sys.argv[2])
+	createPeakSummaryPlots(sys.argv[1],sys.argv[2])
+	createMotifSummaryPlots(sys.argv[1],sys.argv[2])
