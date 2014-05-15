@@ -8,6 +8,9 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import rcParams
+rcParams.update({'figure.autolayout': True})
+
 def createPeakSummaryPlots(inputPath,outPath):
 	# read in inputs
         with open(inputPath) as f:
@@ -35,11 +38,9 @@ def createPeakSummaryPlots(inputPath,outPath):
 		for factor in sorted(list(factorFrequencyHash.keys())):
 			factorIndexHash[factor] = str(counter)
 			counter += 1
-	from matplotlib import rcParams
-	rcParams.update({'figure.autolayout': True})
 
 	# plot the number of peaks per group/factor
-	plt.plot(sorted(groupPeaksHash.values()))
+	plt.plot(sorted(groupPeaksHash.values(),reverse=True))
 	plt.xlabel("Groups")
 	plt.ylabel("Number of Peaks")
 	plt.title("All Factors/Groups VS Peaks")
@@ -51,7 +52,7 @@ def createPeakSummaryPlots(inputPath,outPath):
 	for group in groupPeaksHash.keys():
 		if len(groupComponentsHash[group]) > 1:
 			filteredPeakValues.append(groupPeaksHash[group])
-	plt.plot(sorted(filteredPeakValues))
+	plt.plot(sorted(filteredPeakValues,reverse=True))
 	plt.xlabel("Groups")
 	plt.ylabel("Number of Peaks")
 	plt.title("Groups VS Peaks")
@@ -89,10 +90,45 @@ def createPeakSummaryPlots(inputPath,outPath):
 
 def createMotifSummaryPlots(inputPath, outputPath):
 	# read in input
+        with open(inputPath) as f:
+                data = f.readlines()
+
+	factorFrequencyHash = {} # key - each factor; value: number of times each factor appears in a peak
+	groupPeaksHash = {}# key - each group name, value: number of merged regions that appear in the peak
+	groupComponentsHash = {}
+	start = 3
+	for line in data[1:]:
+		if not "###" in line:
+			start += 1
+		else:
+			break
+	targetFracs = []
+	backgroundFracs = []
+	p_vals = []
+	numMotifs = []
+	groupNumbers = []
+
+	for line in data[start:]:
+		tokens = line.strip().split("\t")
+		groupNumbers.append(tokens[0])
+		targetFracs.append(float(tokens[1]))
+		backgroundFracs.append(float(tokens[2]))
+		p_vals.append(float(tokens[3]))
+		numMotifs.append(int(tokens[4]))
+		
+		
+	# plot the average target fractions per group
+	plt.bar(range(len(targetFracs)),targetFracs)
+	plt.xlabel("Group")
+	plt.ylabel("Target Fraction")
+	plt.title("Average Motif Target Fraction per Group")
+	plt.savefig(outputPath+"averageMotifTargetFraction.png")
+	plt.close()
 	
 
 	
 
 if __name__ == "__main__":
-	createPeakSummaryPlots(sys.argv[1],sys.argv[2])
+	#createPeakSummaryPlots(sys.argv[1],sys.argv[2])
 	createMotifSummaryPlots(sys.argv[1],sys.argv[2])
+	
