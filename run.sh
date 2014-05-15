@@ -170,7 +170,9 @@ then
 		outPath=$path
 		outPath=${outPath%_annotatedPeaks.tsv}
 		outPath=${outPath##*/}_ext.tsv
+		echo "python extendPeaks.py $path ${outputDir}/${outPath} $overlapDistance"
 		python extendPeaks.py $path ${outputDir}/${outPath} $overlapDistance
+
 			
 	done
 	# call merge peaks
@@ -298,4 +300,4 @@ then
 		
 	fi
 
-
+fi
