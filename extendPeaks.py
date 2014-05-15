@@ -15,16 +15,19 @@ for line in data:
 	else:
 		break
 for line in data[start:]:
-	tokens = line.split("\t")
-	start = int(tokens[2])
-	end = int(tokens[3])
-	if start >= overlapDistance:
-		start -= overlapDistance
-	else:
-		start = 0
+	try:
+		tokens = line.split("\t")
+		start = int(tokens[2])
+		end = int(tokens[3])
+		if start >= overlapDistance:
+			start -= overlapDistance
+		else:
+			start = 0
 
-	end += overlapDistance
-	tokens[2] = str(start)
-	tokens[3] = str(end)
-	outputFile.write("\t".join(tokens))
+		end += overlapDistance
+		tokens[2] = str(start)
+		tokens[3] = str(end)
+		outputFile.write("\t".join(tokens))
+	except:
+		pass
 outputFile.close()
