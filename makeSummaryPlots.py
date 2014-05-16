@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import rcParams
 rcParams.update({'figure.autolayout': True})
+import collections
 
 def createPeakSummaryPlots(inputPath,outPath):
 	# read in inputs
@@ -24,7 +25,8 @@ def createPeakSummaryPlots(inputPath,outPath):
 			break
 		tokens = line.strip().split("\t")
 		group = tokens[0]
-		groupPeaksHash[group] = int(tokens[2])
+		#groupPeaksHash[group] = int(tokens[2]) 
+		groupPeaksHash[group] = int(tokens[3]) # use total instead of peaks unique to the group
 		groupTokens = set(group[1:-1].split(", "))
                 groupComponentsHash[group] = groupTokens 
 		# add in individual factors
@@ -40,9 +42,11 @@ def createPeakSummaryPlots(inputPath,outPath):
 			counter += 1
 
 	# plot the number of peaks per group/factor
-	plt.plot(sorted(groupPeaksHash.values(),reverse=True))
-	plt.xlabel("Groups")
-	plt.ylabel("Number of Peaks")
+	#plt.hist(groupPeaksHash.values())
+	plt.hist(map(math.log, map(float,groupPeaksHash.values())))
+	
+	plt.xlabel("Number of Peaks (ln)")
+	plt.ylabel("Frequency")
 	plt.title("All Factors/Groups VS Peaks")
 	plt.savefig(outPath+"allFactorsGroups_vs_mergedRegions.png")
 	plt.close()
@@ -52,9 +56,11 @@ def createPeakSummaryPlots(inputPath,outPath):
 	for group in groupPeaksHash.keys():
 		if len(groupComponentsHash[group]) > 1:
 			filteredPeakValues.append(groupPeaksHash[group])
-	plt.plot(sorted(filteredPeakValues,reverse=True))
-	plt.xlabel("Groups")
-	plt.ylabel("Number of Peaks")
+	#plt.hist(filteredPeakValues)
+	plt.hist(map(math.log,map(float,filteredPeakValues)))
+
+	plt.xlabel("Number of Peaks (ln)")
+	plt.ylabel("Frequency")
 	plt.title("Groups VS Peaks")
 	plt.savefig(outPath+"groups_vs_mergedRegions.png")
 	plt.close()
@@ -119,6 +125,7 @@ def createMotifSummaryPlots(inputPath, outputPath):
 		
 	# plot the average target fractions per group
 	plt.bar(range(len(targetFracs)),targetFracs)
+	plt.hlines(float(math.fsum(targetFracs))/float(len(targetFracs)),0,len(targetFracs))
 	plt.xlabel("Group")
 	plt.ylabel("Target Fraction")
 	plt.title("Average Motif Target Fraction per Group")
@@ -126,9 +133,34 @@ def createMotifSummaryPlots(inputPath, outputPath):
 	plt.close()
 	
 
+	# plot the average background fractions per group
+	plt.bar(range(len(backgroundFracs)),backgroundFracs)
+	plt.hlines(float(math.fsum(backgroundFracs))/float(len(backgroundFracs)),0, len(backgroundFracs))
+	plt.xlabel("Group")
+	plt.ylabel("Background Fraction")
+	plt.title("Average Motif Background Fraction per Group")
+	plt.savefig(outputPath+"averageMotifBackgroundFraction.png")
+	plt.close()
 	
+	# plot the average p-value per group
+	plt.bar(range(len(p_vals)),p_vals)
+	plt.hlines(float(math.fsum(p_vals))/float(len(p_vals)),0, len(p_vals))
+	plt.xlabel("Group")
+	plt.ylabel("P-value")
+	plt.title("Average Motif p-value per Group")
+	plt.savefig(outputPath+"averageMotifPVals.png")
+	plt.close()
+
+	# plot the average number of motifs per group
+	plt.bar(range(len(numMotifs)),numMotifs)
+	plt.hlines(float(math.fsum(numMotifs))/float(len(numMotifs)),0, len(numMotifs))
+	plt.xlabel("Group")
+	plt.ylabel("Number of Motifs")
+	plt.title("Average Number of Motifs per Group")
+	plt.savefig(outputPath+"averageNumberofMotifs.png")
+	plt.close()
 
 if __name__ == "__main__":
-	#createPeakSummaryPlots(sys.argv[1],sys.argv[2])
-	createMotifSummaryPlots(sys.argv[1],sys.argv[2])
+	createPeakSummaryPlots(sys.argv[1],sys.argv[2])
+	#createMotifSummaryPlots(sys.argv[1],sys.argv[2])
 	
