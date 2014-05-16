@@ -11,6 +11,7 @@ import numpy as np
 from matplotlib import rcParams
 rcParams.update({'figure.autolayout': True})
 import collections
+from scipy import stats
 
 def createPeakSummaryPlots(inputPath,outPath):
 	# read in inputs
@@ -41,30 +42,36 @@ def createPeakSummaryPlots(inputPath,outPath):
 			factorIndexHash[factor] = str(counter)
 			counter += 1
 
-	# plot the number of peaks per group/factor
+	# plot the log number of peaks per group/factor
 	#plt.hist(groupPeaksHash.values())
-	plt.hist(map(math.log, map(float,groupPeaksHash.values())))
-	
+
+	# fit a normal distribution
+	sortedValues = sorted(map(math.log,groupPeaksHash.values()))
+	fit = stats.norm.pdf(sortedValues, np.mean(sortedValues), np.std(sortedValues))
+	plt.plot(sortedValues,fit,'-o')
+	plt.hist(map(math.log, map(float,groupPeaksHash.values())),normed=True)
 	plt.xlabel("Number of Peaks (ln)")
+	plt.ylabel("Frequency")
+	plt.title("All Factors/Groups VS Peaks")
+	plt.savefig(outPath+"allFactorsGroups_vs_mergedRegions_log.png")
+	plt.close()
+
+		
+	# plot the number of peaks per group/factor
+	sortedValues = sorted(groupPeaksHash.values())
+	plt.hist(sortedValues, normed=True)
+	# fit a exponential distribution
+	p = np.mean(sortedValues)
+	#fit = [math.pow(1-p,x-1)*p for x in range(np.max(sortedValues))]
+	fit = stats.expon.pdf(sortedValues, np.mean(sortedValues), np.std(sortedValues))
+	plt.plot(sortedValues,fit,'-o')
+
+	plt.xlabel("Number of Peaks")
 	plt.ylabel("Frequency")
 	plt.title("All Factors/Groups VS Peaks")
 	plt.savefig(outPath+"allFactorsGroups_vs_mergedRegions.png")
 	plt.close()
 
-	# plot the number of merged regions per group
-	filteredPeakValues = []
-	for group in groupPeaksHash.keys():
-		if len(groupComponentsHash[group]) > 1:
-			filteredPeakValues.append(groupPeaksHash[group])
-	#plt.hist(filteredPeakValues)
-	plt.hist(map(math.log,map(float,filteredPeakValues)))
-
-	plt.xlabel("Number of Peaks (ln)")
-	plt.ylabel("Frequency")
-	plt.title("Groups VS Peaks")
-	plt.savefig(outPath+"groups_vs_mergedRegions.png")
-	plt.close()
-		
 	# plot the number of times a factor appears in a group
 	factorList = []
 	for factor in factorFrequencyHash:
