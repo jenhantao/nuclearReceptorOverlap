@@ -135,32 +135,32 @@ def createMotifSummaryPlots(inputPath, outputPath):
 		std_p_vals.append(float(tokens[6]))
 		numMotifs.append(int(tokens[7]))
 		
-		
-	# plot the average target fractions, background fraction, and p-value per group
-	fig, ax = plt.subplots()
-	width = 0.4
-	indices = np.arange(len(targetFracs))*1
-	ax.bar(indices,targetFracs,width, color='red', yerr=std_targetFracs)
-	ax.bar(indices+width,backgroundFracs,width, yerr=std_backgroundFracs, color='blue')
-	plt.hlines(float(math.fsum(targetFracs))/float(len(targetFracs)),0,len(indices), color='black')
-	plt.hlines(float(math.fsum(backgroundFracs))/float(len(backgroundFracs)),0,len(indices), color='black')
+	# plot the average target fractions per group
+	plt.bar(range(len(targetFracs)),targetFracs)
+	plt.hlines(float(math.fsum(targetFracs))/float(len(targetFracs)),0,len(targetFracs))
 	plt.xlabel("Group")
-	plt.ylabel("Target Fraction, Background Fraction, P-value")
-	plt.title("Average Motif Target Fraction, Background Fraction per Group")
-	plt.savefig(outputPath+"averageMotifFraction.png")
-	plt.show()
+	plt.ylabel("Target Fraction")
+	plt.title("Average Motif Target Fraction per Group")
+	plt.savefig(outputPath+"averageMotifTargetFraction.png")
 	plt.close()
+	
 
-	# plot average p_values
-	fig, ax = plt.subplots()
-	width = 1
-	indices = np.arange(len(p_vals))*2
-	ax.bar(indices,p_vals,width, yerr=std_p_vals, color='g')
-	plt.hlines(float(math.fsum(p_vals))/float(len(p_vals)),0,len(indices), color='g')
+	# plot the average background fractions per group
+	plt.bar(range(len(backgroundFracs)),backgroundFracs)
+	plt.hlines(float(math.fsum(backgroundFracs))/float(len(backgroundFracs)),0, len(backgroundFracs))
+	plt.xlabel("Group")
+	plt.ylabel("Background Fraction")
+	plt.title("Average Motif Background Fraction per Group")
+	plt.savefig(outputPath+"averageMotifBackgroundFraction.png")
+	plt.close()
+	
+	# plot the average p-value per group
+	plt.bar(range(len(p_vals)),p_vals)
+	plt.hlines(float(math.fsum(p_vals))/float(len(p_vals)),0, len(p_vals))
 	plt.xlabel("Group")
 	plt.ylabel("P-value")
-	plt.title("Average P-valueper Group")
-	plt.savefig(outputPath+"averagePvalue.png")
+	plt.title("Average Motif p-value per Group")
+	plt.savefig(outputPath+"averageMotifPVals.png")
 	plt.close()
 
 	# plot the average number of motifs per group
@@ -168,9 +168,9 @@ def createMotifSummaryPlots(inputPath, outputPath):
 	plt.hlines(float(math.fsum(numMotifs))/float(len(numMotifs)),0, len(numMotifs))
 	plt.xlabel("Group")
 	plt.ylabel("Number of Motifs")
-	plt.title("Number of Motifs per Group")
-	plt.savefig(outputPath+"numberofMotifs.png")
-	plt.close()
+	plt.title("Average Number of Motifs per Group")
+	plt.savefig(outputPath+"averageNumberofMotifs.png")
+	plt.close()		
 
 if __name__ == "__main__":
 	#createPeakSummaryPlots(sys.argv[1],sys.argv[2])

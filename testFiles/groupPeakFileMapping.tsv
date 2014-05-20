@@ -1,0 +1,150 @@
+Group Name	Peak File Name
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24]	groupPeaks_0.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_1.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h]	groupPeaks_2.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_3.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_4.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_5.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 8-ThioMac-PU1-notx-111019]	groupPeaks_6.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 8-ThioMac-PU1-notx-111019]	groupPeaks_7.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_8.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1, 8-ThioMac-PU1-notx-111019]	groupPeaks_9.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 2-BLRP-Foxo1]	groupPeaks_10.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_11.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_12.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2]	groupPeaks_13.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_14.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24]	groupPeaks_15.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_16.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h]	groupPeaks_17.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_18.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_19.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2]	groupPeaks_20.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_21.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24]	groupPeaks_22.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 8-ThioMac-PU1-notx-111019]	groupPeaks_23.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15]	groupPeaks_24.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2]	groupPeaks_25.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_26.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_27.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h]	groupPeaks_28.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_29.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 6-RAW.blrp-THRalpha2]	groupPeaks_30.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_31.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 7-ThioMac-PPARg-MRL24]	groupPeaks_32.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 8-ThioMac-PU1-notx-111019]	groupPeaks_33.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23]	groupPeaks_34.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_35.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_36.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h]	groupPeaks_37.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_38.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2]	groupPeaks_39.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 8-ThioMac-PU1-notx-111019]	groupPeaks_40.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 4-BMDM-LXR-WT_GW3965-1h-13-04-15]	groupPeaks_41.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2]	groupPeaks_42.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_43.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 5-ThioMac-GR-Dex-2h]	groupPeaks_44.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_45.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 6-RAW.blrp-THRalpha2]	groupPeaks_46.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08, 8-ThioMac-PU1-notx-111019]	groupPeaks_47.tsv
+[1-RAW-ChIP-BLRPc3-RevErbb-notx-12-11-08]	groupPeaks_48.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_49.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_50.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2]	groupPeaks_51.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_52.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24]	groupPeaks_53.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_54.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h]	groupPeaks_55.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_56.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24]	groupPeaks_57.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_58.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2]	groupPeaks_59.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_60.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24]	groupPeaks_61.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 8-ThioMac-PU1-notx-111019]	groupPeaks_62.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15]	groupPeaks_63.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_64.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_65.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_66.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h]	groupPeaks_67.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_68.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 6-RAW.blrp-THRalpha2]	groupPeaks_69.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_70.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 7-ThioMac-PPARg-MRL24]	groupPeaks_71.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 8-ThioMac-PU1-notx-111019]	groupPeaks_72.tsv
+[2-BLRP-Foxo1, 3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23]	groupPeaks_73.tsv
+[2-BLRP-Foxo1, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_74.tsv
+[2-BLRP-Foxo1, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h]	groupPeaks_75.tsv
+[2-BLRP-Foxo1, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_76.tsv
+[2-BLRP-Foxo1, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2]	groupPeaks_77.tsv
+[2-BLRP-Foxo1, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_78.tsv
+[2-BLRP-Foxo1, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24]	groupPeaks_79.tsv
+[2-BLRP-Foxo1, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 8-ThioMac-PU1-notx-111019]	groupPeaks_80.tsv
+[2-BLRP-Foxo1, 4-BMDM-LXR-WT_GW3965-1h-13-04-15]	groupPeaks_81.tsv
+[2-BLRP-Foxo1, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_82.tsv
+[2-BLRP-Foxo1, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_83.tsv
+[2-BLRP-Foxo1, 5-ThioMac-GR-Dex-2h]	groupPeaks_84.tsv
+[2-BLRP-Foxo1, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_85.tsv
+[2-BLRP-Foxo1, 6-RAW.blrp-THRalpha2]	groupPeaks_86.tsv
+[2-BLRP-Foxo1, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_87.tsv
+[2-BLRP-Foxo1, 7-ThioMac-PPARg-MRL24]	groupPeaks_88.tsv
+[2-BLRP-Foxo1, 8-ThioMac-PU1-notx-111019]	groupPeaks_89.tsv
+[2-BLRP-Foxo1]	groupPeaks_90.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_91.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24]	groupPeaks_92.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_93.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2]	groupPeaks_94.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_95.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24]	groupPeaks_96.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_97.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h]	groupPeaks_98.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_99.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24]	groupPeaks_100.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_101.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2]	groupPeaks_102.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_103.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24]	groupPeaks_104.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15, 8-ThioMac-PU1-notx-111019]	groupPeaks_105.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 4-BMDM-LXR-WT_GW3965-1h-13-04-15]	groupPeaks_106.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_107.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_108.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2]	groupPeaks_109.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_110.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24]	groupPeaks_111.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_112.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 5-ThioMac-GR-Dex-2h]	groupPeaks_113.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_114.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24]	groupPeaks_115.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_116.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 6-RAW.blrp-THRalpha2]	groupPeaks_117.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_118.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 7-ThioMac-PPARg-MRL24]	groupPeaks_119.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23, 8-ThioMac-PU1-notx-111019]	groupPeaks_120.tsv
+[3-ThioMac-RXR-ChIP-Seq-LG268-18h-13-10-23]	groupPeaks_121.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_122.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2]	groupPeaks_123.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_124.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24]	groupPeaks_125.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_126.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 5-ThioMac-GR-Dex-2h]	groupPeaks_127.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_128.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24]	groupPeaks_129.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_130.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 6-RAW.blrp-THRalpha2]	groupPeaks_131.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_132.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 7-ThioMac-PPARg-MRL24]	groupPeaks_133.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15, 8-ThioMac-PU1-notx-111019]	groupPeaks_134.tsv
+[4-BMDM-LXR-WT_GW3965-1h-13-04-15]	groupPeaks_135.tsv
+[5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_136.tsv
+[5-ThioMac-GR-Dex-2h, 6-RAW.blrp-THRalpha2]	groupPeaks_137.tsv
+[5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_138.tsv
+[5-ThioMac-GR-Dex-2h, 7-ThioMac-PPARg-MRL24]	groupPeaks_139.tsv
+[5-ThioMac-GR-Dex-2h, 8-ThioMac-PU1-notx-111019]	groupPeaks_140.tsv
+[5-ThioMac-GR-Dex-2h]	groupPeaks_141.tsv
+[6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_142.tsv
+[6-RAW.blrp-THRalpha2, 7-ThioMac-PPARg-MRL24]	groupPeaks_143.tsv
+[6-RAW.blrp-THRalpha2, 8-ThioMac-PU1-notx-111019]	groupPeaks_144.tsv
+[6-RAW.blrp-THRalpha2]	groupPeaks_145.tsv
+[7-ThioMac-PPARg-MRL24, 8-ThioMac-PU1-notx-111019]	groupPeaks_146.tsv
+[7-ThioMac-PPARg-MRL24]	groupPeaks_147.tsv
+[8-ThioMac-PU1-notx-111019]	groupPeaks_148.tsv

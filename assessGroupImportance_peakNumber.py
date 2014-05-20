@@ -145,8 +145,10 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 		for neighbor in current.neighbors:
 			if not neighbor in seen and not (current,neighbor) in pairSet:
 				queue.append(neighbor)
-				node1=convertName(factorIndexHash, current.components, mapping)+'|'+str(groupPeaksHash[current.name])
-				node2=convertName(factorIndexHash, neighbor.components, mapping)+'|'+str(groupPeaksHash[neighbor.name])
+#				node1=convertName(factorIndexHash, current.components, mapping)+'|'+str(groupPeaksHash[current.name])
+#				node2=convertName(factorIndexHash, neighbor.components, mapping)+'|'+str(groupPeaksHash[neighbor.name])
+				node1=convertName(factorIndexHash, current.components, mapping)
+				node2=convertName(factorIndexHash, neighbor.components, mapping)
 				outFile.write( '"'+ node1+ '" -- "'+node2+'"\n')
 				nodes.add(node1)
 				nodes.add(node2)
@@ -168,9 +170,11 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 		nodeName = node.split("|")[0]
 		if p_val <= threshold:
 			if z_score < 0.0:
+				#outFile.write( '"'+node + '" [fillcolor="red" style="filled" label="'+node+'"]\n')
 				outFile.write( '"'+node + '" [fillcolor="red" style="filled" label="'+node+'"]\n')
 				listFile.write(nodeName+"\t"+str(p_val)+"\t"+"down\n")
 			else:
+				#outFile.write( '"'+node + '" [fillcolor="green" style="filled" label="'+node+'"]\n')
 				outFile.write( '"'+node + '" [fillcolor="green" style="filled" label="'+node+'"]\n')
 				listFile.write(nodeName+"\t"+str(p_val)+"\t"+"up\n")
 		else:
