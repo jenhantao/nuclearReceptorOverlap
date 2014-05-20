@@ -5,6 +5,8 @@
 import sys
 import os
 import re
+import numpy as np
+import math
 from os.path import isfile, join
 
 # inputs: path to motif files
@@ -69,7 +71,7 @@ def createMotifSummaryFile(path, groupFileMapping, outPath):
 		# parse background motifs directory
 		dir = path+groupFileMapping[key][1]+"/homerResults/"
 		print dir
-		statsDict[key] = [0.0,0.0,0.0]
+		statsDict[key] = [[],[],[]]
 		currentStats = statsDict[key]
 		motifFiles = [f for f in os.listdir(dir) if isfile(join(dir,f)) and motifFilePattern.match(f)]
 		toPrint = key
@@ -83,17 +85,19 @@ def createMotifSummaryFile(path, groupFileMapping, outPath):
 			targetFrac= float(stats[0][stats[0].index("(")+1:stats[0].index(")")-1])
 			backgroundFrac= float(stats[1][stats[1].index("(")+1:stats[1].index(")")-1])
 			p_val = float(stats[2][2:])
-			statsDict[key][0] += targetFrac
-			statsDict[key][1] += backgroundFrac
-			statsDict[key][2] += p_val
+			statsDict[key][0].append(targetFrac)
+			statsDict[key][1].append(backgroundFrac)
+			statsDict[key][2].append(p_val)
 			toPrint +="\t"+sequence+","+annotation+","+str(targetFrac)+","+str(backgroundFrac)+","+str(p_val)
 		outFile.write(toPrint+"\n")
 		numMotifs = len(motifFiles)
-		currentStats = [float(x)/float(numMotifs) for x in currentStats]
-		currentStats.append(numMotifs)
+		meanStats= [math.fsum(x)/float(numMotifs) for x in currentStats]
+		stdStats = [ np.std(x) for x in currentStats]
+		finishedStats = meanStats+stdStats
+		finishedStats.append(numMotifs)
 		statsDict[key] = currentStats
 	outFile.write("### Group Stats ###\n")
-	outFile.write("Group Number\tAverage Target Fraction\tAverage Background Fraction\tAverage p-value\tNumber of Motifs\n")
+	outFile.write("Group Number\tstdev Target Fraction\tstdev Background Fraction\tstdev p-value\tstdev Target Fraction\tstdev Background Fraction\tstdev p-value\tNumber of Motifs\n")
 	for key in sorted(statsDict.keys()):
 		outFile.write(key+"\t"+"\t".join(map(str,statsDict[key]))+"\n")
 	outFile.close()
