@@ -95,7 +95,7 @@ def createMotifSummaryFile(path, groupFileMapping, outPath):
 		stdStats = [ np.std(x) for x in currentStats]
 		finishedStats = meanStats+stdStats
 		finishedStats.append(numMotifs)
-		statsDict[key] = currentStats
+		statsDict[key] = finishedStats
 	outFile.write("### Group Stats ###\n")
 	outFile.write("Group Number\tstdev Target Fraction\tstdev Background Fraction\tstdev p-value\tstdev Target Fraction\tstdev Background Fraction\tstdev p-value\tNumber of Motifs\n")
 	for key in sorted(statsDict.keys()):
