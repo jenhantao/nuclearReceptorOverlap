@@ -221,6 +221,22 @@ then
 	rm -rf $outputDir/splitPeaks
 	mkdir $outputDir/splitPeaks
 	python splitMergedPeaks.py $outputDir/merged_annotated.tsv $outputDir/group_stats.tsv $outputDir/splitPeaks
+	
+	# conduct GO analysis on each spit peak file
+	if [ ! -d $outputDir/GO_analysis ]
+	then
+		mkdir $outputDir/GO_analysis
+	fi
+	for path in $outputDir/splitPeaks/groupPeaks*.tsv
+	do
+		[ -f "${path}" ] || continue
+		outpath=$(basename $path)
+		outpath=${outpath##groupPeaks}
+		outpath=${outpath%%.tsv}
+		outpath="group${outpath}_GO_analysis"
+		echo "annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath"
+		annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath
+	done
 
 	# create bed files for each split group file
 	for path in $outputDir/splitPeaks/groupPeaks*.tsv
