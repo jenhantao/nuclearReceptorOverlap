@@ -147,6 +147,26 @@ then
 			echo $command
 			$($command > ${outputDir}/${outPath})
 		done
+		# annotate merged regions with all tag directories and all motifs
+		command="annotatePeaks.pl $outputDir/merged.tsv mm9 -size 200 -d"
+		for path in $inputPath/*
+		do
+			[ -d "${path}" ] || continue # if not a directory, skip
+			# skip directories that contain input
+			if [[ ! $path  =~ .*[iI]{1}nput.* ]]
+			then
+				# consider only files tagged with a number at the front
+				if [[ $(basename $path) =~ ^[0-9]-.* ]]
+				then
+					command+=" "
+					# append tag directory to command
+					command+="$path"
+				fi
+			fi
+	done
+	command+=" -m $outputDir/mergedMotifs/homerMotifs.all.motifs"
+	echo $command
+	$command > $outputDir/merged_annotated.tsv
 
 	fi
 	#Quantification of Data at Peaks/Regions in the Genome/Histograms and Heatmaps (annotatePeaks.pl)
@@ -192,30 +212,24 @@ then
 	then	
 		findMotifsGenome.pl $outputDir/merged.tsv mm9 $outputDir/mergedMotifs/ -size 200
 	fi
-	# annotate merged regions with all tag directories and all motifs
-	command="annotatePeaks.pl $outputDir/merged.tsv mm9 -size 200 -d"
-	for path in $inputPath/*
-	do
-		[ -d "${path}" ] || continue # if not a directory, skip
-		# skip directories that contain input
-		if [[ ! $path  =~ .*[iI]{1}nput.* ]]
-		then
-			# consider only files tagged with a number at the front
-			if [[ $(basename $path) =~ ^[0-9]-.* ]]
-			then
-				command+=" "
-				# append tag directory to command
-				command+="$path"
-			fi
-		fi
-	done
-	command+=" -m $outputDir/mergedMotifs/homerMotifs.all.motifs"
-	echo $command
-	$command > $outputDir/merged_annotated.tsv
 	
 	# compute overlapping groups
 	echo "computing stats for overlapping groups"
 	python calcGroupStats.py $outputDir/merged.tsv $outputDir/merged_annotated.tsv> $outputDir/group_stats.tsv
+
+	# create human readable file
+	command="python makeSummaryFile.py"
+	for path in $outputDir/*_peaks.tsv
+	do
+		[ -f "${path}" ] || continue
+		command+=" "$path
+		# run commands in the background
+	done
+	command+="$outputDir/group_stats.tsv"
+	command+="$outputDir/motif_stats.tsv"
+	#$command > $outputDir/group_summary.tsv
+	echo $command
+	
 
 	# create different peak files for each group
 	rm -rf $outputDir/splitPeaks
