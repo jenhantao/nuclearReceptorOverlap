@@ -219,14 +219,25 @@ then
 
 	# create human readable file
 	command="python makeSummaryFile.py"
+	if [ -f $outputDir/factorNameMapping.tsv ]
+	then
+		command+=" 1"
+	else
+		command+=" 0"
+	fi
+	command+=" $outputDir/merged.tsv"
+	command+=" $outputDir/group_stats.tsv"
+	command+=" $outputDir/motif_stats.tsv"
 	for path in $outputDir/*_peaks.tsv
 	do
 		[ -f "${path}" ] || continue
 		command+=" "$path
 	done
-	command+="$outputDir/group_stats.tsv"
-	command+="$outputDir/motif_stats.tsv"
-	#$command > $outputDir/group_summary.tsv
+	if [ -f $outputDir/factorNameMapping.tsv ]
+	then
+		command+=" $outputDir/factorNameMapping.tsv" # factorNameMapping file is not created automatically!
+	fi
+	$command > $outputDir/group_summary.tsv
 	echo $command
 	
 
@@ -307,7 +318,6 @@ then
 			echo $command >> $outputDir/qsub_script.sh
 			qsub $outputDir/qsub_script.sh
 			rm $outputDir/qsub_script.sh
-			
 		done
 
 		
