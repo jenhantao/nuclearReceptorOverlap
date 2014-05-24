@@ -25,8 +25,6 @@ for line in data[1:]:
 		else:
 			groupHash[key].append(peak)
 
-# account for all merged regions that a subgroup appears in
-
 # sort regions by size
 groups = [(i , len(i.split(","))) for i in groupHash.keys()]
 groups.sort(key = lambda x:x[1])
