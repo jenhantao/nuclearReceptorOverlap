@@ -11,6 +11,7 @@ import numpy as np
 from matplotlib import rcParams
 rcParams.update({'figure.autolayout': True})
 import collections
+import scipy
 from scipy import stats
 
 def createPeakSummaryPlots(inputPath,outPath):
@@ -58,13 +59,17 @@ def createPeakSummaryPlots(inputPath,outPath):
 
 		
 	# plot the number of peaks per group/factor
+	from scipy import cluster
 	sortedValues = sorted(groupPeaksHash.values())
-	plt.hist(sortedValues, normed=True)
-	# fit a exponential distribution
-	p = np.mean(sortedValues)
-	#fit = [math.pow(1-p,x-1)*p for x in range(np.max(sortedValues))]
-	fit = stats.expon.pdf(sortedValues, np.mean(sortedValues), np.std(sortedValues))
+	centroid = sorted(cluster.vq.kmeans(np.array(sortedValues), 3)[0])[1]
+	std = np.std(sortedValues)
+	mean = np.mean(sortedValues)
+	sortedValues = [x for x in sortedValues if abs(x-centroid)<=std/2.0]
+	# fit a poisson distribution
+	param = np.mean(sortedValues)
+	fit = stats.poisson.pmf(sortedValues, param)
 	plt.plot(sortedValues,fit,'-o')
+	plt.hist(sortedValues, normed=True, bins=10)
 
 	plt.xlabel("Number of Peaks")
 	plt.ylabel("Frequency")
@@ -173,6 +178,6 @@ def createMotifSummaryPlots(inputPath, outputPath):
 	plt.close()		
 
 if __name__ == "__main__":
-	#createPeakSummaryPlots(sys.argv[1],sys.argv[2])
-	createMotifSummaryPlots(sys.argv[1],sys.argv[2])
+	createPeakSummaryPlots(sys.argv[1],sys.argv[2])
+	#createMotifSummaryPlots(sys.argv[1],sys.argv[2])
 	
