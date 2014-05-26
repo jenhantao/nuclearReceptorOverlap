@@ -15,6 +15,12 @@ then
 mkdir $outputDir
 fi
 # create a file summarizing the parameters used
+cp config.sh $outputDir/runParams.txt
+echo "inputPath=$1" >>runParams.txt
+echo "outputDir=$2" >>runParams.txt
+echo "stepOne=$3" >>runParams.txt
+echo "stepTwo=$4" >>runParams.txt
+echo "stepThree=$5" >>runParams.txt
 
 
 
