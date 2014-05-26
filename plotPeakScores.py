@@ -45,7 +45,9 @@ def makePeakPlots(unfilteredPeakPath, filteredPeakPath, outPath):
 		filteredPeakScores.append(peakScore)
 
 	# plot peaks
-	plt.hist(unfilteredTagCounts, filteredTagCounts, bins=100)
+	bins = np.histogram(unfilteredTagCounts, bins=100)[1]
+	plt.hist((unfilteredTagCounts,filteredTagCounts), bins)
+	#plt.hist((unfilteredTagCounts,filteredTagCounts), bins, color=["red","blue"])
 	ax = plt.gca()
 	ax.legend(["Unfiltered", "Filtered"])
         plt.xlabel("Percentile")
@@ -54,7 +56,9 @@ def makePeakPlots(unfilteredPeakPath, filteredPeakPath, outPath):
         plt.savefig(outPath+"_tagCount.png")
         plt.close()
 
-	plt.hist(unfilteredPeakScores, fileredPeakScores, bins=100)
+	bins = np.histogram(unfilteredPeakScores, bins=100)[1]
+	plt.hist((unfilteredPeakScores,filteredPeakScores), bins)
+	#plt.hist((unfilteredPeakScores,filteredPeakScores), bins, color=["red","blue"])
 	ax = plt.gca()
 	ax.legend(["Unfiltered", "Filtered"])
         plt.xlabel("Percentile")
