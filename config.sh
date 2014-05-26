@@ -16,9 +16,12 @@ export useControl=true
 export updateTags=false
 export overlapDistance=200 # bp distance for calculating overlaps
 # options for whether or not to run pipeline stages
-export makeUCSC=false
+export makeUCSC=true
 export findPeaks=true
-export findMotifs=false
-export annotatePeaks=false
-export quantifyPeaks=false
+export findMotifs=true
+export annotatePeaks=true
+export quantifyPeaks=true
 export cluster=false
+
+# threshold used for filtering peaks
+export percentilethreshold="5"

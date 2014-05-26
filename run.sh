@@ -182,6 +182,20 @@ fi
 if $stepTwo
 then
 	echo "calculating overlapping cistromes"
+	echo "filtering peaks"
+	# filter peaks summarize peak score and tag counts of each file
+	for path in $outputDir/*_peaks.tsv
+	do
+		[ -f "${path}" ] || continue
+		filteredPath=${path%_peaks.tsv}
+		filteredPath+="_filteredPeaks.tsv"
+		echo "python filterPeaks.py $path > $filteredPath"
+		python filterPeaks.py $path $percentileThreshold > $filteredPath
+		outpath=${path%_peaks.tsv}
+		outpath+="_unfiltered"
+		echo "python plotPeakScores.py $path $outpath"
+		python plotPeakScores.py $path $filteredPath $outpath
+	done
 	echo "extending peaks"
 	# iterate through each peak file and modify the start and the end
 	for path in $outputDir/*_annotatedPeaks.tsv
@@ -239,12 +253,15 @@ then
 	fi
 	$command > $outputDir/group_summary.tsv
 	echo $command
-	
 
 	# create different peak files for each group
 	rm -rf $outputDir/splitPeaks
 	mkdir $outputDir/splitPeaks
 	python splitMergedPeaks.py $outputDir/merged_annotated.tsv $outputDir/group_stats.tsv $outputDir/splitPeaks
+
+	# filter peaks according to threshold peak score
+	
+
 	
 	# create bed files for each split group file
 	for path in $outputDir/splitPeaks/groupPeaks*.tsv
