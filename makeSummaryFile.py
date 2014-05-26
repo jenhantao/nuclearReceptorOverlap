@@ -31,7 +31,9 @@ def buildSummary(useFileMapping, mergedPath, groupStatsPath, motifStatsPath, fac
 			tokens = line.strip().split("\t")
 			id = tokens[0]
 			tagCount = tokens[5]
-			currentDict[id] = tagCount
+			peakScore = tokens[7]
+			#currentDict[id] = tagCount
+			currentDict[id] = peakScore
 			
 	# read in merged regions
 	# for each merged, region, create a tuple that contains: the id, coordinates and a vector of which factors contributed to it
