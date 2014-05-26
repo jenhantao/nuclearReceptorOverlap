@@ -14,6 +14,7 @@ if [ ! -d $outputDir ]
 then
 mkdir $outputDir
 fi
+# create a file summarizing the parameters used
 
 
 
@@ -109,19 +110,40 @@ then
 		done
 	fi
 
+	echo "filtering peaks"
+	# filter peaks summarize peak score and tag counts of each file
+	for path in $outputDir/*_peaks.tsv
+	do
+		[ -f "${path}" ] || continue
+		filteredPath=${path%_peaks.tsv}
+		filteredPath+="_filteredPeaks.tsv"
+		echo "python filterPeaks.py $path > $filteredPath"
+		python filterPeaks.py $path $percentileThreshold > $filteredPath
+		outpath=${path%_peaks.tsv}
+		echo "python plotPeakScores.py $path $filteredPath $outpath"
+		python plotPeakScores.py $path $filteredPath $outpath
+	done
+	if [ -d $outputDir/peakScorePlots ]
+	then
+	rm -rf $outputDir/peakScorePlots
+	fi
+	mkdir $outputDir/peakScorePlots
+	mv $outputDir/*_peakScore.png $outputDir/peakScorePlots
+	mv $outputDir/*_tagCount.png $outputDir/peakScorePlots
+
 	#Motif analysis (findMotifsGenome.pl)
 	if $findMotifs
 	then
 		echo "finding motifs"
 		mkdir $outputDir/factorMotifs
-		for path in $outputDir/*_peaks.tsv
+		for path in $outputDir/*_filteredPeaks.tsv
 		do
    			[ -f "${path}" ] || continue
 			command="findMotifsGenome.pl "
 			command+=" "$path
 			# run commands in the background
 			outPath=$path
-			outPath=${outPath%_peaks.tsv}
+			outPath=${outPath%_filteredPeaks.tsv}
 			outPath=${outPath##*/}_motifs
 			command+=" $genome ${outputDir}/factorMotifs/${outPath}"
 			echo $command
@@ -133,14 +155,14 @@ then
 	if $annotatePeaks
 	then
 		echo "annotating peaks"
-		for path in $outputDir/*_peaks.tsv
+		for path in $outputDir/*_filteredPeaks.tsv
 		do
    			[ -f "${path}" ] || continue
 			command="annotatePeaks.pl"
 			command+=" "$path
 			# run commands in the background
 			outPath=$path
-			outPath=${outPath%_peaks.tsv}
+			outPath=${outPath%_filteredPeaks.tsv}
 			outPath=${outPath##*/}_annotatedPeaks.tsv
 			#command+=" $genome > ${outputDir}/${outPath}"
 			command+=" $genome"
@@ -182,27 +204,14 @@ fi
 if $stepTwo
 then
 	echo "calculating overlapping cistromes"
-	echo "filtering peaks"
-	# filter peaks summarize peak score and tag counts of each file
-	for path in $outputDir/*_peaks.tsv
-	do
-		[ -f "${path}" ] || continue
-		filteredPath=${path%_peaks.tsv}
-		filteredPath+="_filteredPeaks.tsv"
-		echo "python filterPeaks.py $path > $filteredPath"
-		python filterPeaks.py $path $percentileThreshold > $filteredPath
-		outpath=${path%_peaks.tsv}
-		outpath+="_unfiltered"
-		echo "python plotPeakScores.py $path $outpath"
-		python plotPeakScores.py $path $filteredPath $outpath
-	done
+
 	echo "extending peaks"
 	# iterate through each peak file and modify the start and the end
-	for path in $outputDir/*_annotatedPeaks.tsv
+	for path in $outputDir/*_filteredPeaks.tsv
 	do
 		[ -f "${path}" ] || continue
 		outPath=$path
-		outPath=${outPath%_annotatedPeaks.tsv}
+		outPath=${outPath%_filteredPeaks.tsv}
 		outPath=${outPath##*/}_ext.tsv
 		echo "python extendPeaks.py $path ${outputDir}/${outPath} $overlapDistance"
 		python extendPeaks.py $path ${outputDir}/${outPath} $overlapDistance
@@ -242,7 +251,7 @@ then
 	command+=" $outputDir/merged.tsv"
 	command+=" $outputDir/group_stats.tsv"
 	command+=" $outputDir/motif_stats.tsv"
-	for path in $outputDir/*_peaks.tsv
+	for path in $outputDir/*_filteredPeaks.tsv
 	do
 		[ -f "${path}" ] || continue
 		command+=" "$path
@@ -258,10 +267,6 @@ then
 	rm -rf $outputDir/splitPeaks
 	mkdir $outputDir/splitPeaks
 	python splitMergedPeaks.py $outputDir/merged_annotated.tsv $outputDir/group_stats.tsv $outputDir/splitPeaks
-
-	# filter peaks according to threshold peak score
-	
-
 	
 	# create bed files for each split group file
 	for path in $outputDir/splitPeaks/groupPeaks*.tsv
