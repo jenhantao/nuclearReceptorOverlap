@@ -16,11 +16,13 @@ mkdir $outputDir
 fi
 # create a file summarizing the parameters used
 cp config.sh $outputDir/runParams.txt
-echo "inputPath=$1" >>runParams.txt
-echo "outputDir=$2" >>runParams.txt
-echo "stepOne=$3" >>runParams.txt
-echo "stepTwo=$4" >>runParams.txt
-echo "stepThree=$5" >>runParams.txt
+echo "inputPath=$1" >>$outputDir/runParams.txt
+echo "outputDir=$2" >>$outputDir/runParams.txt
+echo "stepOne=$3" >>$outputDir/runParams.txt
+echo "stepTwo=$4" >>$outputDir/runParams.txt
+echo "stepThree=$5" >>$outputDir/runParams.txt
+echo "hub url = http://glassome.ucsd.edu/hubs/$(basename $outputDir)/hub.txt" >>$outputDir/runParams.txt
+
 
 
 
@@ -51,6 +53,7 @@ then
 	then
 		echo "making UCSC multibig wig file"
 		# iterate over all tag directories and make a hub	
+		hub=$(basename $outputDir)
 		command="makeMultiWigHub.pl $hub $genome -force -d"
 		for path in $inputPath/*
 		do
@@ -68,6 +71,7 @@ then
 		done
 		echo "$command"
 		$($command)
+	
 	fi
 	#Peak finding / Transcript detection / Feature identification (findPeaks)
 	if $findPeaks 
@@ -136,6 +140,15 @@ then
 	mkdir $outputDir/peakScorePlots
 	mv $outputDir/*_peakScore.png $outputDir/peakScorePlots
 	mv $outputDir/*_tagCount.png $outputDir/peakScorePlots
+	# create bed files for each peak file
+	for path in $outputDir/*_filteredPeaks.tsv
+	do
+		outPath=$(basename $path)
+		outPath=${outPath%%_filteredPeaks.tsv}
+		outPath+=".bed"
+		echo "pos2bed.pl $path > $outputDir/$outPath"
+		pos2bed.pl $path > $outputDir/$outPath
+	done
 
 	#Motif analysis (findMotifsGenome.pl)
 	if $findMotifs
@@ -192,7 +205,10 @@ then
 					fi
 				fi
 		done
-		command+=" -m $outputDir/mergedMotifs/homerMotifs.all.motifs"
+		if $findMotifs
+		then
+			command+=" -m $outputDir/mergedMotifs/homerMotifs.all.motifs"
+		fi
 		echo $command
 		$command > $outputDir/merged_annotated.tsv
 	fi
@@ -230,10 +246,16 @@ then
 		command+=" $path"
 	done
 	echo $command
-	$command > ${outputDir}/merged.tsv
+
+	$command > ${outputDir}/merged_ext.tsv
+
+	# shrink peak boundaries by overlap distance
+	echo "python shrinkPeaks.py $outputDir/merged_ext.tsv $outputDir/merged.tsv $overlapDistance"
+	python shrinkPeaks.py $outputDir/merged_ext.tsv $outputDir/merged.tsv $overlapDistance
 
 	# produce bed file for visualization for merged region
-	pos2bed.pl $outputDir/merged.tsv > $outputDir/peakfile.bed
+	
+	pos2bed.pl $outputDir/merged.tsv > $outputDir/merged.bed
 
 	# find motifs for merged regions
 	if $findMotifs
