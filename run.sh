@@ -352,7 +352,7 @@ then
 			outpath=${outpath##groupPeaks}
 			outpath=${outpath%%.tsv}
 			annotatedPath=$outpath
-			annotatedPath+="_annotated.tsv"
+			annotatedPath="group${annotatedPath}_annotated.tsv"
 			outpath="group${outpath}_GO_analysis"
 			echo "annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath > $outputDir/splitPeaks/$annotatedPath"
 			annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath > $outputDir/splitPeaks/$annotatedPath
