@@ -159,43 +159,42 @@ then
 	fi
 	#Annotation of Peaks (annotatePeaks.pl)
 	if $annotatePeaks
-	then
-		echo "annotating peaks"
-		for path in $outputDir/*_filteredPeaks.tsv
-		do
-   			[ -f "${path}" ] || continue
-			command="annotatePeaks.pl"
-			command+=" "$path
-			# run commands in the background
-			outPath=$path
-			outPath=${outPath%_filteredPeaks.tsv}
-			outPath=${outPath##*/}_annotatedPeaks.tsv
-			#command+=" $genome > ${outputDir}/${outPath}"
-			command+=" $genome"
-			echo $command
-			$($command > ${outputDir}/${outPath})
-		done
-		# annotate merged regions with all tag directories and all motifs
-		command="annotatePeaks.pl $outputDir/merged.tsv mm9 -size 200 -d"
-		for path in $inputPath/*
-		do
-			[ -d "${path}" ] || continue # if not a directory, skip
-			# skip directories that contain input
-			if [[ ! $path  =~ .*[iI]{1}nput.* ]]
-			then
-				# consider only files tagged with a number at the front
-				if [[ $(basename $path) =~ ^[0-9]-.* ]]
+		then
+			echo "annotating peaks"
+			for path in $outputDir/*_filteredPeaks.tsv
+			do
+				[ -f "${path}" ] || continue
+				command="annotatePeaks.pl"
+				command+=" "$path
+				# run commands in the background
+				outPath=$path
+				outPath=${outPath%_filteredPeaks.tsv}
+				outPath=${outPath##*/}_annotatedPeaks.tsv
+				#command+=" $genome > ${outputDir}/${outPath}"
+				command+=" $genome"
+				echo $command
+				$($command > ${outputDir}/${outPath})
+			done
+			# annotate merged regions with all tag directories and all motifs
+			command="annotatePeaks.pl $outputDir/merged.tsv mm9 -size 200 -d"
+			for path in $inputPath/*
+			do
+				[ -d "${path}" ] || continue # if not a directory, skip
+				# skip directories that contain input
+				if [[ ! $path  =~ .*[iI]{1}nput.* ]]
 				then
-					command+=" "
-					# append tag directory to command
-					command+="$path"
+					# consider only files tagged with a number at the front
+					if [[ $(basename $path) =~ ^[0-9]-.* ]]
+					then
+						command+=" "
+						# append tag directory to command
+						command+="$path"
+					fi
 				fi
-			fi
-	done
-	command+=" -m $outputDir/mergedMotifs/homerMotifs.all.motifs"
-	echo $command
-	$command > $outputDir/merged_annotated.tsv
-
+		done
+		command+=" -m $outputDir/mergedMotifs/homerMotifs.all.motifs"
+		echo $command
+		$command > $outputDir/merged_annotated.tsv
 	fi
 	#Quantification of Data at Peaks/Regions in the Genome/Histograms and Heatmaps (annotatePeaks.pl)
 	if $quantifyPeaks 
@@ -244,7 +243,7 @@ then
 	
 	# compute overlapping groups
 	echo "computing stats for overlapping groups"
-	python calcGroupStats.py $outputDir/merged.tsv $outputDir/merged_annotated.tsv> $outputDir/group_stats.tsv
+	python calcGroupStats.py $outputDir/merged.tsv > $outputDir/group_stats.tsv
 
 	# create human readable file
 	command="python makeSummaryFile.py"
@@ -272,19 +271,8 @@ then
 	# create different peak files for each group
 	rm -rf $outputDir/splitPeaks
 	mkdir $outputDir/splitPeaks
-	python splitMergedPeaks.py $outputDir/merged_annotated.tsv $outputDir/group_stats.tsv $outputDir/splitPeaks
+	python splitMergedPeaks.py $outputDir/merged.tsv $outputDir/group_stats.tsv $outputDir/splitPeaks
 	
-	# create bed files for each split group file
-	for path in $outputDir/splitPeaks/groupPeaks*.tsv
-	do
-		[ -f "${path}" ] || continue
-		outpath=$(basename $path)
-		outpath=${outpath##groupPeaks}
-		outpath=${outpath%%tsv}
-		outpath="group${outpath}bed"
-		python annotatedPeak2Bed.py $path > $outputDir/splitPeaks/$outpath
-		
-	done
 
 	# create a graph visualizing the hierarchy of the groups
 	python createHierarchyTree.py $outputDir/group_stats.tsv >$outputDir/hierarchy.txt
@@ -293,7 +281,6 @@ then
 	# create a graph visualizing the connectivity of the groups
 	python createPeakGraph.py $outputDir/group_stats.tsv > $outputDir/graph_peak.txt
 	circo -Tpng $outputDir/graph_peak.txt > $outputDir/graph_peak.png
-
 fi
 
 ### conduct differential motif analysis on overlapping cistromes ###
@@ -364,11 +351,26 @@ then
 			outpath=$(basename $path)
 			outpath=${outpath##groupPeaks}
 			outpath=${outpath%%.tsv}
+			annotatedPath=$outpath
+			annotatedPath+="_annotated.tsv"
 			outpath="group${outpath}_GO_analysis"
-			echo "annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath"
-			annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath
+			echo "annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath > $outputDir/splitPeaks/$annotatedPath"
+			annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath > $outputDir/splitPeaks/$annotatedPath
 		done
-	fi
+	
+		# create bed files for each split group file
+		for path in $outputDir/splitPeaks/*_annotated.tsv
+		do
+			[ -f "${path}" ] || continue
+			outpath=$(basename $path)
+			outpath=${outpath##groupPeaks}
+			outpath=${outpath%%tsv}
+			outpath="group${outpath}bed"
+			echo "python annotatedPeak2Bed.py $path > $outputDir/splitPeaks/$outpath"
+			python annotatedPeak2Bed.py $path > $outputDir/splitPeaks/$outpath
+			
+		done
+		fi
 
 
 fi

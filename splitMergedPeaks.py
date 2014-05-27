@@ -12,7 +12,16 @@ outputDirectory = sys.argv[3]
 with open(peakFilePath) as f:
 	data = f.readlines()
 peakIdLineHash = {} # key: peak id, value: line in peak file corresponding to peak
-for line in data[1:]:
+
+start = 0 
+for line in data:
+	if line[0] == "#":
+		print line.strip()
+		start+=1
+	else:  
+		break
+
+for line in data[start:]:
 	tokens = line.split("\t")
 	id = tokens[0]
 	peakIdLineHash[id] = line
