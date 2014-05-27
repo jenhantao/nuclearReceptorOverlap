@@ -134,4 +134,11 @@ def createGraph(groupStatsFilePath):
 
 if __name__ == "__main__":
 	groupStatsFilePath = sys.argv[1]
-	root = createGraph(groupStatsFilePath)
+        mapping = None 
+        if len(sys.argv)>4: 
+                mapping = readMapping(sys.argv[4]) 
+        threshold = float(sys.argv[2]) 
+        outputPath = sys.argv[3] 
+        root = createGraph(groupStatsFilePath, outputPath, threshold, mapping) 
+
+
