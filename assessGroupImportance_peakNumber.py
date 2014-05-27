@@ -75,8 +75,11 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 	groupArray.sort(key=lambda x: (x[1],x[0]))
 	groupArray.reverse()
 	groupIndexHash["Root"] = "Root"
-	groupPeaksHash["Root"] = sum(groupPeaksHash.values())
-	groupPeaksUniqueHash["Root"] = sum(groupPeaksHash.values())
+	totalPeaks = 0
+	for factor in factors:
+		totalPeaks+=groupPeaksHash["["+factor+"]"]
+	groupPeaksHash["Root"] = totalPeaks
+	groupPeaksUniqueHash["Root"] = totalPeaks
 
 	# create initial graph
 	# create root node
@@ -89,6 +92,7 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 		if not parentName in groupNodeHash:
 			newNode = Node(parentName)
 			newNode.components = groupComponentsHash[parentName]
+			newNode.peaks = groupPeaksHash[parentName]
 			groupNodeHash[parentName] = newNode
 		parent = groupNodeHash[parentName]
 		componentsToCover = parent.components.copy()
@@ -100,6 +104,7 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 				if not childName in groupNodeHash:
 					newNode = Node(childName)
 					newNode.components = groupComponentsHash[childName]
+					newNode.peaks = groupPeaksHash[childName]
 					groupNodeHash[childName] = newNode
 				child = groupNodeHash[childName]
 				if len(parent.components) == len(child.components)+slack:
@@ -136,7 +141,7 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 	queue = [root]
 	seen = set()
 	pairSet = set ()
-	nodes = set()
+	nameMappingDict = {} # key group name, value: converted name
 
 	while queue:
 		current = queue[0]
@@ -145,41 +150,38 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 		for neighbor in current.neighbors:
 			if not neighbor in seen and not (current,neighbor) in pairSet:
 				queue.append(neighbor)
-#				node1=convertName(factorIndexHash, current.components, mapping)+'|'+str(groupPeaksHash[current.name])
-#				node2=convertName(factorIndexHash, neighbor.components, mapping)+'|'+str(groupPeaksHash[neighbor.name])
 				node1=convertName(factorIndexHash, current.components, mapping)
 				node2=convertName(factorIndexHash, neighbor.components, mapping)
+				nameMappingDict[current.name] = node1
+				nameMappingDict[neighbor.name] = node2
+
 				outFile.write( '"'+ node1+ '" -- "'+node2+'"\n')
-				nodes.add(node1)
-				nodes.add(node2)
 				pairSet.add((current,neighbor))
 	# test each node and color accordingly
 	vals = []
-	for node in nodes:
-		x = float(node.split("|")[1])
+	for peakNumber in groupPeaksHash.values():
+		x = float(peakNumber)
 		vals.append(math.log(x))
 
 	hist, bin_edges = np.histogram(vals)
 	mean, se= fitNormal(vals,hist, bin_edges)
 	
 	listFile.write("Group\tp-value\tOutcome\n")
-	for node in nodes:
-		x = math.log(float(node.split("|")[1]))
+	for group in groupPeaksHash.keys():
+		x = math.log(groupPeaksHash[group])
 		z_score= (x-mean)/se
 		p_val = norm.pdf(z_score)
-		nodeName = node.split("|")[0]
+		groupName= nameMappingDict[group]
 		if p_val <= threshold:
 			if z_score < 0.0:
-				#outFile.write( '"'+node + '" [fillcolor="red" style="filled" label="'+node+'"]\n')
-				outFile.write( '"'+node + '" [fillcolor="red" style="filled" label="'+node+'"]\n')
-				listFile.write(nodeName+"\t"+str(p_val)+"\t"+"down\n")
+				outFile.write( '"'+groupName + '" [fillcolor="red" style="filled" label="'+groupName+"|"+str(p_val)+'"]\n')
+				listFile.write(groupName+"\t"+str(p_val)+"\t"+"down\n")
 			else:
-				#outFile.write( '"'+node + '" [fillcolor="green" style="filled" label="'+node+'"]\n')
-				outFile.write( '"'+node + '" [fillcolor="green" style="filled" label="'+node+'"]\n')
-				listFile.write(nodeName+"\t"+str(p_val)+"\t"+"up\n")
+				outFile.write( '"'+groupName + '" [fillcolor="green" style="filled" label="'+groupName+"|"+str(p_val)+'"]\n')
+				listFile.write(groupName+"\t"+str(p_val)+"\t"+"up\n")
 		else:
-			outFile.write( '"'+node + '" [label="'+node+"|"+str(p_val)+'"]\n')
-			listFile.write(nodeName+"\t"+str(p_val)+"\t"+"expected\n")
+			outFile.write( '"'+groupName + '" [label="'+groupName+"|"+str(p_val)+'"]\n')
+			listFile.write(groupName+"\t"+str(p_val)+"\t"+"expected\n")
 	outFile.write( "}\n")
 	outFile.close()
 	listFile.close()
