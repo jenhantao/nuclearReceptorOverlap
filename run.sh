@@ -10,6 +10,9 @@ stepOne=$3 # run basic analysis for each tag directory
 stepTwo=$4 # mege peaks and look for overlapping cistromes
 stepThree=$5 # conduct differential motif analysis on overlapping cistromes
 
+### FOR THRESHOLD GRADIENT ###
+percentileThreshold=$6
+
 if [ ! -d $outputDir ]
 then
 mkdir $outputDir
@@ -21,10 +24,12 @@ echo "outputDir=$2" >>$outputDir/runParams.txt
 echo "stepOne=$3" >>$outputDir/runParams.txt
 echo "stepTwo=$4" >>$outputDir/runParams.txt
 echo "stepThree=$5" >>$outputDir/runParams.txt
+echo "percentileThreshold=$6" >> $outputDir/runParams.txt
 echo "hub url = http://glassome.ucsd.edu/hubs/$(basename $outputDir)/hub.txt" >>$outputDir/runParams.txt
 
 
-
+echo $percentileThreshold
+exit
 
 ### basic analysis for each the peaks and define cistromes ###
 if $stepOne
