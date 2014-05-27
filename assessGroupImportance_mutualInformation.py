@@ -13,12 +13,27 @@ class Node:
 		self.peaks = None
 		self.name = name
 
-def convertName(indexHash, components):
-	compList = sorted(list(components))
-	toReturn = []
-	for comp in compList:
-		toReturn.append(indexHash[comp])
-	return " ".join(sorted(toReturn))
+def readMapping(path):
+        toReturn = {}
+        with open(path) as f:
+                data = f.readlines()
+        for line in data:
+                tokens = line.strip().split("\t")
+                toReturn[tokens[0]] = tokens[1]
+        if len(toReturn.keys()):
+                return toReturn
+        else:
+                return None
+
+
+def convertName(indexHash, components, factorMapping=None):
+        compList = sorted(list(components))
+        toReturn = []
+        for comp in compList:
+                toReturn.append(indexHash[comp])
+                if mapping:
+                        toReturn[-1] = factorMapping[toReturn[-1]]
+        return " ".join(sorted(toReturn))
 
 def createGraph(groupStatsFilePath):
 	with open(groupStatsFilePath) as f:
@@ -69,8 +84,6 @@ def createGraph(groupStatsFilePath):
 			newNode.components = groupComponentsHash[parentName]
 			groupNodeHash[parentName] = newNode
 		parent = groupNodeHash[parentName]
-		componentsToCover = parent.components.copy()
-		slack = 1 # difference between the size of the parent an the size of the child
 		for j in range(len(groupArray)):
 			if not i==j:
 				childName = groupArray[j][0]
@@ -80,16 +93,10 @@ def createGraph(groupStatsFilePath):
 					newNode.components = groupComponentsHash[childName]
 					groupNodeHash[childName] = newNode
 				child = groupNodeHash[childName]
-				if len(parent.components) == len(child.components)+slack:
-					if len(parent.components & child.components) == len(child.components):
-						componentsToCover = componentsToCover - child.components
-						child.parent = parent
-						parent.neighbors.append(child)
-				elif len(parent.components) == len(child.components)+slack+1:
-					if not componentsToCover:
-						break
-					else:
-						slack += 1
+				if len(parent.components & child.components) == len(child.components):
+					componentsToCover = componentsToCover - child.components
+					child.parent = parent
+					parent.neighbors.append(child)
 
 	# attach nodes with no parents to the root
 	for node in groupNodeHash.values():

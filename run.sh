@@ -372,3 +372,9 @@ then
 
 
 fi
+
+
+### clean up ###
+rm ./*.pos
+rm ./*.seq
+rm ./*.tmp
