@@ -111,5 +111,3 @@ if __name__ == "__main__":
 		factorMappingPath = sys.argv[-1]
 		factorPaths = sys.argv[5:-1]
 	buildSummary(useFileMapping, mergedPath, groupStatsPath, motifStatsPath, factorPaths, factorMappingPath)
-
-
