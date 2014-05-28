@@ -174,13 +174,13 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 		groupName= nameMappingDict[group]
 		if p_val <= threshold:
 			if z_score < 0.0:
-				outFile.write( '"'+groupName + '" [fillcolor="red" style="filled" label="'+groupName+"|"+str(p_val)+'"]\n')
+				outFile.write( '"'+groupName + '" [fillcolor="red" style="filled" label="'+groupName+'"]\n')
 				listFile.write(groupName+"\t"+str(p_val)+"\t"+"down\n")
 			else:
-				outFile.write( '"'+groupName + '" [fillcolor="green" style="filled" label="'+groupName+"|"+str(p_val)+'"]\n')
+				outFile.write( '"'+groupName + '" [fillcolor="green" style="filled" label="'+groupName+'"]\n')
 				listFile.write(groupName+"\t"+str(p_val)+"\t"+"up\n")
 		else:
-			outFile.write( '"'+groupName + '" [label="'+groupName+"|"+str(p_val)+'"]\n')
+			outFile.write( '"'+groupName + '" [label="'+groupName+'"]\n')
 			listFile.write(groupName+"\t"+str(p_val)+"\t"+"expected\n")
 	outFile.write( "}\n")
 	outFile.close()
@@ -198,10 +198,10 @@ def fitNormal(vals, hist, bin_edges):
 if __name__ == "__main__":
 	groupStatsFilePath = sys.argv[1]
 	mapping = None
-	if len(sys.argv)>4:
-		mapping = readMapping(sys.argv[4])
 	threshold = float(sys.argv[2])
 	outputPath = sys.argv[3]
+	if len(sys.argv)>4:
+		mapping = readMapping(sys.argv[4])
 	root = createGraph(groupStatsFilePath, outputPath, threshold, mapping)
 
 
