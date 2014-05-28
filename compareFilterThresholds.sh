@@ -24,4 +24,5 @@ do
 done
 
 echo ${mergedRegions[@]}
+echo ${thresholds[@]}
 echo ${fileNames[@]}

@@ -9,19 +9,19 @@ export home="/data/home/jtao/"
 
 # options for the pipeline
 #UCSC visualization (makeUCSCfile, makeBigWig.pl)
-export hub="tao"
 export genome="mm9"
 export generalInput="~/background_test/standardInputPeaks.tsv"
 export useControl=true
-export updateTags=false
+export updateTags=true
 export overlapDistance=200 # bp distance for calculating overlaps
 # options for whether or not to run pipeline stages
-export makeUCSC=false
-export findPeaks=false
-export findMotifs=true
+export makeUCSC=true
+export findPeaks=true
+export findMotifs=false
 export annotatePeaks=true
 export quantifyPeaks=true
 export cluster=false
 
 # threshold used for filtering peaks
 export percentileThreshold="0"
+export significanceThreshold="0.0001"

@@ -27,10 +27,6 @@ echo "stepThree=$5" >>$outputDir/runParams.txt
 echo "percentileThreshold=$6" >> $outputDir/runParams.txt
 echo "hub url = http://glassome.ucsd.edu/hubs/$(basename $outputDir)/hub.txt" >>$outputDir/runParams.txt
 
-
-echo $percentileThreshold
-exit
-
 ### basic analysis for each the peaks and define cistromes ###
 if $stepOne
 then
@@ -241,10 +237,13 @@ then
 		outPath=${outPath##*/}_ext.tsv
 		echo "python extendPeaks.py $path ${outputDir}/${outPath} $overlapDistance"
 		python extendPeaks.py $path ${outputDir}/${outPath} $overlapDistance
-
-			
 	done
 	# call merge peaks
+	# remove merged_ext.tsv just in case
+	if [-f $outputDir/merged_ext.tsv ]
+	then
+		rm $ouptputDir/merged_ext.tsv
+	fi
 	command="mergePeaks -d given "
 	for path in $outputDir/*_ext.tsv
 	do
@@ -257,6 +256,7 @@ then
 	# shrink peak boundaries by overlap distance
 	echo "python shrinkPeaks.py $outputDir/merged_ext.tsv $outputDir/merged.tsv $overlapDistance"
 	python shrinkPeaks.py $outputDir/merged_ext.tsv $outputDir/merged.tsv $overlapDistance
+	rm $outputDir/merged_ext.tsv
 
 	# produce bed file for visualization for merged region
 	
@@ -302,12 +302,19 @@ then
 	
 
 	# create a graph visualizing the hierarchy of the groups
-	python createHierarchyTree.py $outputDir/group_stats.tsv >$outputDir/hierarchy.txt
+	echo "python createHierarchyTree.py $outputDir/group_stats.tsv $outputDir/factorNameMapping.tsv>$outputDir/hierarchy.txt"
+	python createHierarchyTree.py $outputDir/group_stats.tsv $outputDir/factorNameMapping.tsv > $outputDir/hierarchy.txt
 	dot -Tpng $outputDir/hierarchy.txt > $outputDir/hierarchy.png
 
 	# create a graph visualizing the connectivity of the groups
 	python createPeakGraph.py $outputDir/group_stats.tsv > $outputDir/graph_peak.txt
 	circo -Tpng $outputDir/graph_peak.txt > $outputDir/graph_peak.png
+
+	# test the number of peaks per group
+	echo "python assessGroupImportance_peakNumber.py $outputDir/group_stats.tsv $significanceThreshold $outputDir $outputDir/factorNameMapping.tsv"
+	python assessGroupImportance_peakNumber.py $outputDir/group_stats.tsv $significanceThreshold $outputDir $outputDir/factorNameMapping.tsv 
+	echo "dot -Tpng $outputDir/hierarchy_peakZtest_$significanceThreshold.txt > $outputDir/hierarchy_peakZtest_$significanceThreshold.png"
+	dot -Tpng $outputDir/hierarchy_peakZtest_$significanceThreshold.txt > $outputDir/hierarchy_peakZtest_$significanceThreshold.png
 fi
 
 ### conduct differential motif analysis on overlapping cistromes ###
