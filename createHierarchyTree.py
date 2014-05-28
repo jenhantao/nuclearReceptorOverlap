@@ -115,13 +115,13 @@ def createGraph(groupStatsFilePath, mapping):
 	print "ratio=1.0"
 	#print "dpi=50"
 	# create legend
-	print "{ rank = sink"
-	print "Legend[shape=none, margine=0, label =<"
-	print '<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">'
-	for factor in sorted(factorIndexHash.keys()):
-		print "<TR><TD>"+factor+"</TD><TD>"+factorIndexHash[factor]+"</TD></TR>"
-	print "</TABLE>>]"
-	print "}"
+#	print "{ rank = sink"
+#	print "Legend[shape=none, margine=0, label =<"
+#	print '<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">'
+#	for factor in sorted(factorIndexHash.keys()):
+#		print "<TR><TD>"+factor+"</TD><TD>"+factorIndexHash[factor]+"</TD></TR>"
+#	print "</TABLE>>]"
+#	print "}"
 
 	queue = [root]
 	seen = set()
