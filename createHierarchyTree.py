@@ -12,15 +12,29 @@ class Node:
 		self.components = set()
 		self.peaks = None
 		self.name = name
+def readMapping(path):
+        toReturn = {}
+        with open(path) as f:
+                data = f.readlines()
+        for line in data:
+                tokens = line.strip().split("\t")
+                toReturn[tokens[0]] = tokens[1]
+        if len(toReturn.keys()):
+                return toReturn
+        else:
+                return None
 
-def convertName(indexHash, components):
-	compList = sorted(list(components))
-	toReturn = []
-	for comp in compList:
-		toReturn.append(indexHash[comp])
-	return " ".join(sorted(toReturn))
 
-def createGraph(groupStatsFilePath):
+def convertName(indexHash, components, factorMapping=None):
+        compList = sorted(list(components))
+        toReturn = []
+        for comp in compList:
+                toReturn.append(indexHash[comp])
+                if mapping:
+                        toReturn[-1] = factorMapping[toReturn[-1]]
+        return " ".join(sorted(toReturn))
+
+def createGraph(groupStatsFilePath, mapping):
 	with open(groupStatsFilePath) as f:
 		data = f.readlines()
 
@@ -119,7 +133,7 @@ def createGraph(groupStatsFilePath):
 		for neighbor in current.neighbors:
 			if not neighbor in seen and not (current,neighbor) in pairSet:
 				queue.append(neighbor)
-				print '"'+convertName(factorIndexHash, current.components)+'|'+str(groupPeaksHash[current.name])+ '" -- "'+convertName(factorIndexHash, neighbor.components)+'|'+str(groupPeaksHash[neighbor.name])+'"'
+				print '"'+convertName(factorIndexHash, current.components, mapping)+'|'+str(groupPeaksHash[current.name])+ '" -- "'+convertName(factorIndexHash, neighbor.components, mapping)+'|'+str(groupPeaksHash[neighbor.name])+'"'
 				pairSet.add((current,neighbor))
 	print "}"
 	return root
@@ -127,4 +141,7 @@ def createGraph(groupStatsFilePath):
 
 if __name__ == "__main__":
 	groupStatsFilePath = sys.argv[1]
-	root = createGraph(groupStatsFilePath)
+        mapping = None
+        if len(sys.argv)>2:
+                mapping = readMapping(sys.argv[2])
+	root = createGraph(groupStatsFilePath, mapping)
