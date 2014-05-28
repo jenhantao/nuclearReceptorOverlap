@@ -94,7 +94,9 @@ def buildSummary(useFileMapping, mergedPath, groupStatsPath, motifStatsPath, fac
 					else:
 						scores.append(factorDict[factors[i]][peaks[i]])
 				else:
-					scores.append("")
+					scores.append("0")
+			while len(scores) < len(factors):
+				scores.append("0")
 			print str(groupNumber)+"\t"+",".join(groupFactors)+"\t"+mergedID+"\t"+position+"\t"+"\t".join(scores)
 		groupNumber += 1
 
