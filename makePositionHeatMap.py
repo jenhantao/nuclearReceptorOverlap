@@ -84,7 +84,7 @@ def plotScores(inputPath, outPath):
 	# fix ticks and labels
 	ax.set_yticks(np.arange(len(factors))+0.5, minor=False)
 	ax.set_xticks(chromBreaks)
-	ax.set_xticklabels([])
+	ax.set_xticklabels(chromosomes)
 	factors.reverse()
 	ax.set_yticklabels(factors, minor=False)
 	plt.title("Peak Scores per Merged Region Per Factor")
