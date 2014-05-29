@@ -72,9 +72,9 @@ def plotScores(inputPath, outPath):
 				scoreMatrix[factorNumber][i] = peakScores[factorNumber]	
 				scoreArray.append(peakScores[factorNumber])
 	fig, ax = plt.subplots()
-	img = ax.imshow(scoreMatrix, cmap=cm.Blues, extent=[0, len(mergedRegions),0,len(factors)+1],aspect =len(mergedRegions)/len(factors)/2, interpolation="none") 
+	img = ax.imshow(scoreMatrix, cmap=cm.Blues, extent=[0, len(mergedRegions),0,len(factors)],aspect =len(mergedRegions)/len(factors)/2, interpolation="none") 
 	fig.colorbar(img)
-	plt.vlines(chromBreaks,len(factors),len(factors)+1, color="grey")
+	#plt.vlines(chromBreaks,len(factors),len(factors)+1, color="grey")
 	# label chromosome breaks
 #	for i in range(len(chromBreaks)-1):
 #		chrBreak = chromBreaks[i]
@@ -83,6 +83,9 @@ def plotScores(inputPath, outPath):
 		
 	# fix ticks and labels
 	ax.set_yticks(np.arange(len(factors))+0.5, minor=False)
+	ax.set_xticks(chromBreaks)
+	ax.set_xticklabels([])
+	factors.reverse()
 	ax.set_yticklabels(factors, minor=False)
 	plt.title("Peak Scores per Merged Region Per Factor")
 
