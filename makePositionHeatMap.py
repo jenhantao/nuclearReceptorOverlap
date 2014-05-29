@@ -11,6 +11,8 @@ from matplotlib import rcParams
 import matplotlib.cm as cm
 rcParams.update({'figure.autolayout': True})
 
+# inputs: path to groups summary file, directory to place images in
+# outputs: creates plot image file in in outPath
 def plotScores(inputPath, outPath):
 	with open(inputPath) as f:
 		data = f.readlines()
@@ -74,20 +76,14 @@ def plotScores(inputPath, outPath):
 	fig, ax = plt.subplots()
 	img = ax.imshow(scoreMatrix, cmap=cm.Blues, extent=[0, len(mergedRegions),0,len(factors)],aspect =len(mergedRegions)/len(factors)/2, interpolation="none") 
 	fig.colorbar(img)
-	#plt.vlines(chromBreaks,len(factors),len(factors)+1, color="grey")
-	# label chromosome breaks
-#	for i in range(len(chromBreaks)-1):
-#		chrBreak = chromBreaks[i]
-#		chrBreakNext = chromBreaks[i+1]
-#		plt.text((chrBreak+chrBreakNext)/2, len(factors)+0.5, chromosomes[i])
 		
 	# fix ticks and labels
 	ax.set_yticks(np.arange(len(factors))+0.5, minor=False)
 	ax.set_xticks(chromBreaks)
-	ax.set_xticklabels(chromosomes)
+	ax.set_xticklabels([])
 	factors.reverse()
 	ax.set_yticklabels(factors, minor=False)
-	plt.title("Peak Scores per Merged Region Per Factor")
+	plt.title("Log Peak Scores per Merged Region Per Factor")
 
 	# save files
 	plt.savefig(outPath+"positionHeatMap.png", bbox_inches='tight', dpi=400)
@@ -99,13 +95,6 @@ def plotScores(inputPath, outPath):
 	plt.savefig(outPath+"positionHeatMap_peakScores.png")
 	plt.close()
 	sortedFile.close()
-		
-
-		
-	# convert scores to x, y, and z coordinates
-	scores = [[] for i in range(len(factors))]
-	
-	# plot a line indicating the boundary between chromosomes
 	
 if __name__ == "__main__":
 	summaryPath = sys.argv[1]
