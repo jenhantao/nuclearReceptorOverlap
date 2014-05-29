@@ -74,7 +74,7 @@ def plotScores(inputPath, outPath):
 	fig, ax = plt.subplots()
 	img = ax.imshow(scoreMatrix, cmap=cm.Blues, extent=[0, len(mergedRegions),0,len(factors)+1],aspect =len(mergedRegions)/len(factors)/2, interpolation="none") 
 	fig.colorbar(img)
-	plt.vlines(chromBreaks,0,len(factors)+1, color="grey")
+	plt.vlines(chromBreaks,len(factors),len(factors)+1, color="grey")
 	# label chromosome breaks
 #	for i in range(len(chromBreaks)-1):
 #		chrBreak = chromBreaks[i]
