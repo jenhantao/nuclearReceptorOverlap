@@ -7,9 +7,9 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt 
 import numpy as np
-from matplotlib import rcParams
+#from matplotlib import rcParams
 import matplotlib.cm as cm
-rcParams.update({'figure.autolayout': True})
+#rcParams.update({'figure.autolayout': True})
 
 # inputs: path to groups summary file, path to a peaks file, and base path for output files
 # outputs: creates plot image file in in outPath
@@ -87,20 +87,23 @@ def plotScores(summaryPath, inputPath, outPath):
 				scoreMatrix[factorNumber][i] = peakScores[factorNumber]	
 				scoreArray.append(peakScores[factorNumber])
 	fig, ax = plt.subplots()
-	print scoreMatrix
-	print len(ids)
-	img = ax.imshow(scoreMatrix, cmap=cm.Blues, extent=[0, len(mergedRegions),0,len(factors)],aspect =len(mergedRegions)/len(factors)/2, interpolation="none") 
-	fig.colorbar(img)
+	plt.pcolor(scoreMatrix, cmap=cm.Blues)
+	plt.colorbar()
+	### this plotting code is better, but it won't work on the server ###
+	#fig.colorbar(img)
+	#img = ax.imshow(scoreMatrix, cmap=cm.Blues, extent=[0, len(mergedRegions),0,len(factors)],aspect =len(mergedRegions)/len(factors)/2, interpolation="none") 
+	#factors.reverse()
+	### ###
 		
 	# fix ticks and labels
 	ax.set_yticks(np.arange(len(factors))+0.5, minor=False)
 	ax.set_xticks(chromBreaks)
 	ax.set_xticklabels([])
-	factors.reverse()
+	ax.set_aspect(len(mergedRegions)/len(factors)/2)
 	ax.set_yticklabels(factors, minor=False)
 	plt.title("Log Peak Scores per Merged Region Per Factor")
 	# save files
-	plt.savefig(outPath+ "_positionHeatmap.png")
+	plt.savefig(outPath+ "_positionHeatmap.png", dpi=400)
 	plt.close()
 	sortedFile.close()
 	
