@@ -53,7 +53,7 @@ def plotScores(inputPath, outPath):
 
 		
 	# save files
-	plt.savefig(outPath+"groupHeatMap.png", bbox_inches='tight', dpi=200)
+	plt.savefig(outPath+"/groupHeatMap.png", bbox_inches='tight', dpi=200)
 	plt.close()
 		
 if __name__ == "__main__":

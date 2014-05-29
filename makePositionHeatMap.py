@@ -86,13 +86,13 @@ def plotScores(inputPath, outPath):
 	plt.title("Log Peak Scores per Merged Region Per Factor")
 
 	# save files
-	plt.savefig(outPath+"positionHeatMap.png", bbox_inches='tight', dpi=400)
+	plt.savefig(outPath+"/positionHeatMap.png", bbox_inches='tight', dpi=400)
 	#plt.show()
 	plt.close()
 	plt.hist(scoreArray, normed = True)
 	plt.ylabel("frequency")
 	plt.xlabel("score")
-	plt.savefig(outPath+"positionHeatMap_peakScores.png")
+	plt.savefig(outPath+"/positionHeatMap_peakScores.png")
 	plt.close()
 	sortedFile.close()
 	

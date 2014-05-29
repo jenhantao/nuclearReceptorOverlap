@@ -307,8 +307,14 @@ then
 	dot -Tpng $outputDir/hierarchy.txt > $outputDir/hierarchy.png
 
 	# create a graph visualizing the connectivity of the groups
-	python createPeakGraph.py $outputDir/group_stats.tsv > $outputDir/graph_peak.txt
-	circo -Tpng $outputDir/graph_peak.txt > $outputDir/graph_peak.png
+	python createPeakGraph.py $outputDir/group_stats.tsv > $outputDir/group_connectivity.txt
+	circo -Tpng $outputDir/graph_peak.txt > $outputDir/group_connectivity.png
+
+	# create a heat map visualizing the connectivity of the groups
+	python makeGroupHeatMap.py $outputDir/group_summary.tsv $outputDir
+	
+	# create a heat map visualizing the peak scores per merged region
+	python makePositionHeatMap.py $outputDir/group_summary.tsv $outputDir
 
 	# test the number of peaks per group
 	echo "python assessGroupImportance_peakNumber.py $outputDir/group_stats.tsv $significanceThreshold $outputDir $outputDir/factorNameMapping.tsv"
