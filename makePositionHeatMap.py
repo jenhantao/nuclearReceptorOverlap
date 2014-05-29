@@ -11,15 +11,28 @@ from matplotlib import rcParams
 import matplotlib.cm as cm
 rcParams.update({'figure.autolayout': True})
 
-# inputs: path to groups summary file, directory to place images in
+# inputs: path to groups summary file, path to a peaks file, and base path for output files
 # outputs: creates plot image file in in outPath
-def plotScores(inputPath, outPath):
+def plotScores(summaryPath, inputPath, outPath):
 	with open(inputPath) as f:
+		data = f.readlines()
+	start = 0 
+        for line in data:
+                if line[0] == "#":
+                        start += 1
+	ids = set()
+        for line in data[start:]:
+                tokens = line.strip().split("\t")
+		id = tokens[0]
+		ids.add(id)
+		
+	with open(summaryPath) as f:
 		data = f.readlines()
 	factors = data[0].strip().split("\t")[4:]
 	# read in scores and bin according to chromosome
 	mergedRegions = []
 	lineDict = {}
+	otherIDs = set()
 	for line in data[1:]:
 		tokens = line.strip().split("\t")
 		if not "random" in tokens[3]:
@@ -43,15 +56,15 @@ def plotScores(inputPath, outPath):
 			end = int(tokens[3][tokens[3].index("-")+1:])
 			id =tokens[2]
 			lineDict[id] = line
+			#if id in ids:
 			mergedRegions.append((id,chromosome, start, end, peakScores))
 	# sort by chromosome and start
 	mergedRegions = sorted(mergedRegions, key=lambda x: (x[1], x[2]))
 	chromBreaks = [] # marks the breaks between chromosomes
 	chromosomes = [] # chromosome labels
-	position = 0
 	scoreMatrix = np.zeros((len(factors),len(mergedRegions)))
 	scoreArray = []
-	sortedFile = open(outPath+"group_summary_sorted.tsv", "w")
+	sortedFile = open(outPath+"_sorted_summary.tsv", "w")
 	sortedFile.write(data[0])
 	for i in range(len(mergedRegions)):
 		reg = mergedRegions[i]
@@ -74,6 +87,8 @@ def plotScores(inputPath, outPath):
 				scoreMatrix[factorNumber][i] = peakScores[factorNumber]	
 				scoreArray.append(peakScores[factorNumber])
 	fig, ax = plt.subplots()
+	print scoreMatrix
+	print len(ids)
 	img = ax.imshow(scoreMatrix, cmap=cm.Blues, extent=[0, len(mergedRegions),0,len(factors)],aspect =len(mergedRegions)/len(factors)/2, interpolation="none") 
 	fig.colorbar(img)
 		
@@ -84,22 +99,16 @@ def plotScores(inputPath, outPath):
 	factors.reverse()
 	ax.set_yticklabels(factors, minor=False)
 	plt.title("Log Peak Scores per Merged Region Per Factor")
-
 	# save files
-	plt.savefig(outPath+"/positionHeatMap.png", bbox_inches='tight', dpi=400)
-	#plt.show()
-	plt.close()
-	plt.hist(scoreArray, normed = True)
-	plt.ylabel("frequency")
-	plt.xlabel("score")
-	plt.savefig(outPath+"/positionHeatMap_peakScores.png")
+	plt.savefig(outPath+ "_positionHeatmap.png")
 	plt.close()
 	sortedFile.close()
 	
 if __name__ == "__main__":
 	summaryPath = sys.argv[1]
-	outPath = sys.argv[2]
-	plotScores(summaryPath, outPath)
+	inputPath = sys.argv[2]
+	outPath = sys.argv[3]
+	plotScores(summaryPath, inputPath, outPath)
 	
 
 	

@@ -298,11 +298,12 @@ then
 	# create different peak files for each group
 	rm -rf $outputDir/splitPeaks
 	mkdir $outputDir/splitPeaks
+	echo "python splitMergedPeaks.py $outputDir/merged.tsv $outputDir/group_stats.tsv $outputDir/splitPeaks"
 	python splitMergedPeaks.py $outputDir/merged.tsv $outputDir/group_stats.tsv $outputDir/splitPeaks
-	
+
+	echo "creating visualizations" 
 
 	# create a graph visualizing the hierarchy of the groups
-	echo "python createHierarchyTree.py $outputDir/group_stats.tsv $outputDir/factorNameMapping.tsv>$outputDir/hierarchy.txt"
 	python createHierarchyTree.py $outputDir/group_stats.tsv $outputDir/factorNameMapping.tsv > $outputDir/hierarchy.txt
 	dot -Tpng $outputDir/hierarchy.txt > $outputDir/hierarchy.png
 
@@ -311,11 +312,41 @@ then
 	circo -Tpng $outputDir/graph_peak.txt > $outputDir/group_connectivity.png
 
 	# create a heat map visualizing the connectivity of the groups
+	echo "python makeGroupHeatMap.py $outputDir/group_summary.tsv $outputDir"
 	python makeGroupHeatMap.py $outputDir/group_summary.tsv $outputDir
 	
-	# create a heat map visualizing the peak scores per merged region
-	python makePositionHeatMap.py $outputDir/group_summary.tsv $outputDir
+	# create a heat map visualizing the peak scores per merged region for all groups
+	echo "python makePositionHeatMap.py $outputDir/group_summary.tsv $outputDir/merged.tsv $outputDir/merged"
+	python makePositionHeatMap.py $outputDir/group_summary.tsv $outputDir/merged.tsv $outputDir/merged
 
+	# create a heat map visualizing the peak scores per merged region for each individual group
+	for path in $outputDir/splitPeaks/groupPeaks*.tsv
+	do
+		outPath=${path%.tsv}
+		echo "python makePositionHeatMap.py $outputDir/group_summary.tsv $path $outPath"
+		python makePositionHeatMap.py $outputDir/group_summary.tsv $path $outPath
+	done
+
+	# create a plot summarizing tag densities near merged peaks
+	command="annotatePeaks.pl $outputDir/merged.tsv $genome -size 2000 -hist 10 -d"
+	for path in $inputPath/*
+	do
+		[ -d "${path}" ] || continue # if not a directory, skip
+		# skip directories that contain input
+		if [[ ! $path  =~ .*[iI]{1}nput.* ]]
+		then
+			if [[ $(basename $path) =~ ^[0-9]-.* ]]
+			then
+				# append tag directory to command
+				command+=" $path"
+			fi
+		fi
+	done
+	command+=" > $outputDir/mergedPeakDensity.tsv"
+	echo "$command"
+	$($command)
+	# plot peak density for each individual group
+	
 	# test the number of peaks per group
 	echo "python assessGroupImportance_peakNumber.py $outputDir/group_stats.tsv $significanceThreshold $outputDir $outputDir/factorNameMapping.tsv"
 	python assessGroupImportance_peakNumber.py $outputDir/group_stats.tsv $significanceThreshold $outputDir $outputDir/factorNameMapping.tsv 
@@ -344,7 +375,6 @@ then
 			echo $command >> $outputDir/qsub_script.sh
 			qsub $outputDir/qsub_script.sh
 			rm $outputDir/qsub_script.sh
-			
 		done
 
 		# try suggested input
@@ -374,11 +404,9 @@ then
 			qsub $outputDir/qsub_script.sh
 			rm $outputDir/qsub_script.sh
 		done
-
-		
 	fi
 	
-	# conduct GO analysis on each spit peak file
+	# conduct GO analysis on each split peak file
 	if $GO
 	then
 	if [ ! -d $outputDir/GO_analysis ]
