@@ -17,6 +17,7 @@ def plotScores(inputPath, outPath):
 	factors = data[0].strip().split("\t")[4:]
 	# read in scores and bin according to chromosome
 	mergedRegions = []
+	lineDict = {}
 	for line in data[1:]:
 		tokens = line.strip().split("\t")
 		if not "random" in tokens[3]:
@@ -38,28 +39,63 @@ def plotScores(inputPath, outPath):
 				chromosome = int(chromosome)
 			start = int(tokens[3][tokens[3].index(":")+1:tokens[3].index("-")])
 			end = int(tokens[3][tokens[3].index("-")+1:])
-			mergedRegions.append((chromosome, start, end, peakScores))
-	mergedRegions = sorted(mergedRegions, key=lambda x: (x[0], x[1]))
+			id =tokens[2]
+			lineDict[id] = line
+			mergedRegions.append((id,chromosome, start, end, peakScores))
+	# sort by chromosome and start
+	mergedRegions = sorted(mergedRegions, key=lambda x: (x[1], x[2]))
 	chromBreaks = [] # marks the breaks between chromosomes
-	x = []
-	y = []
-	z = []
+	chromosomes = [] # chromosome labels
 	position = 0
 	scoreMatrix = np.zeros((len(factors),len(mergedRegions)))
+	scoreArray = []
+	sortedFile = open(outPath+"group_summary_sorted.tsv", "w")
+	sortedFile.write(data[0])
 	for i in range(len(mergedRegions)):
 		reg = mergedRegions[i]
 		peakScores = reg[-1]
+		id = reg[0]
+		chrom = reg[1]
+		if not chrom in chromosomes:
+			chromosomes.append(chrom)
+			chromBreaks.append(i)
+		sortedFile.write(lineDict[id])
 		for factorNumber in range(len(peakScores)):
-			scoreMatrix[factorNumber][i] = peakScores[factorNumber]	
-#			x.append(position)
-#			y.append(factorNumber)
-#			z.append(peakScores[factorNumber])
+			if True:
+				if peakScores[factorNumber] != 0.0:
+					scoreMatrix[factorNumber][i] = math.log(peakScores[factorNumber])
+					scoreArray.append(math.log(peakScores[factorNumber]))
+				else:
+					scoreMatrix[factorNumber][i] = peakScores[factorNumber]	
+					scoreArray.append(peakScores[factorNumber])
+			else:
+				scoreMatrix[factorNumber][i] = peakScores[factorNumber]	
+				scoreArray.append(peakScores[factorNumber])
 	fig, ax = plt.subplots()
-	ax.set_aspect("equal")
-	img = ax.pcolor(scoreMatrix, cmap=cm.gray)
+	img = ax.imshow(scoreMatrix, cmap=cm.Blues, extent=[0, len(mergedRegions),0,len(factors)+1],aspect =len(mergedRegions)/len(factors)/2, interpolation="none") 
 	fig.colorbar(img)
-	plt.savefig(outPath+"positionHeatMap.png")
+	plt.vlines(chromBreaks,0,len(factors)+1, color="grey")
+	# label chromosome breaks
+#	for i in range(len(chromBreaks)-1):
+#		chrBreak = chromBreaks[i]
+#		chrBreakNext = chromBreaks[i+1]
+#		plt.text((chrBreak+chrBreakNext)/2, len(factors)+0.5, chromosomes[i])
+		
+	# fix ticks and labels
+	ax.set_yticks(np.arange(len(factors))+0.5, minor=False)
+	ax.set_yticklabels(factors, minor=False)
+	plt.title("Peak Scores per Merged Region Per Factor")
+
+	# save files
+	plt.savefig(outPath+"positionHeatMap.png", bbox_inches='tight', dpi=400)
+	#plt.show()
 	plt.close()
+	plt.hist(scoreArray, normed = True)
+	plt.ylabel("frequency")
+	plt.xlabel("score")
+	plt.savefig(outPath+"positionHeatMap_peakScores.png")
+	plt.close()
+	sortedFile.close()
 		
 
 		
@@ -68,7 +104,6 @@ def plotScores(inputPath, outPath):
 	
 	# plot a line indicating the boundary between chromosomes
 	
-
 if __name__ == "__main__":
 	summaryPath = sys.argv[1]
 	outPath = sys.argv[2]
