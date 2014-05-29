@@ -1,9 +1,26 @@
 # produces a graph visualization of a group stats file. 
-# input: group stats file
+# input: group stats file, output file path
 # output: graph in DOT language format
 
 ### imports ###
 import sys
+import numpy as np
+import math
+from scipy.stats import norm
+
+
+def readMapping(path):
+	toReturn = {}
+	with open(path) as f:
+		data = f.readlines()
+	for line in data:
+		tokens = line.strip().split("\t")
+		toReturn[tokens[0]] = tokens[1]
+	if len(toReturn.keys()):
+		return toReturn
+	else:
+		return None
+
 
 class Node:
 	def __init__(self, name = None):
@@ -13,41 +30,30 @@ class Node:
 		self.peaks = None
 		self.name = name
 
-def readMapping(path):
-        toReturn = {}
-        with open(path) as f:
-                data = f.readlines()
-        for line in data:
-                tokens = line.strip().split("\t")
-                toReturn[tokens[0]] = tokens[1]
-        if len(toReturn.keys()):
-                return toReturn
-        else:
-                return None
-
-
 def convertName(indexHash, components, factorMapping=None):
-        compList = sorted(list(components))
-        toReturn = []
-        for comp in compList:
-                toReturn.append(indexHash[comp])
-                if mapping:
-                        toReturn[-1] = factorMapping[toReturn[-1]]
-        return " ".join(sorted(toReturn))
+	compList = sorted(list(components))
+	toReturn = []
+	for comp in compList:
+		toReturn.append(indexHash[comp])
+		if mapping:
+			toReturn[-1] = factorMapping[toReturn[-1]]
+	return " ".join(sorted(toReturn))
 
-def createGraph(groupStatsFilePath):
+def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 	with open(groupStatsFilePath) as f:
 		data = f.readlines()
 
 	groupComponentsHash = {} # key: group name - individual factors count as groups, value: set of factors comprising that group
 	factors = set()
 	groupPeaksHash = {}
+	groupPeaksUniqueHash = {}
 	for line in data[2:]:
 		if "###" in line:
 			break
 		tokens = line.strip().split("\t")
 		group = tokens[0]
-		groupPeaksHash[group] = int(tokens[2])
+		groupPeaksHash[group] = int(tokens[3])
+		groupPeaksUniqueHash[group] = int(tokens[2])
 		groupTokens = set(group[1:-1].split(", "))
 		groupComponentsHash[group] = groupTokens
 		# add in individual factors
@@ -69,7 +75,11 @@ def createGraph(groupStatsFilePath):
 	groupArray.sort(key=lambda x: (x[1],x[0]))
 	groupArray.reverse()
 	groupIndexHash["Root"] = "Root"
-	groupPeaksHash["Root"] = sum(groupPeaksHash.values())
+	totalPeaks = 0
+	for factor in factors:
+		totalPeaks+=groupPeaksHash["["+factor+"]"]
+	groupPeaksHash["Root"] = totalPeaks
+	groupPeaksUniqueHash["Root"] = totalPeaks
 
 	# create initial graph
 	# create root node
@@ -82,6 +92,7 @@ def createGraph(groupStatsFilePath):
 		if not parentName in groupNodeHash:
 			newNode = Node(parentName)
 			newNode.components = groupComponentsHash[parentName]
+			newNode.peaks = groupPeaksHash[parentName]
 			groupNodeHash[parentName] = newNode
 		parent = groupNodeHash[parentName]
 		for j in range(len(groupArray)):
@@ -91,10 +102,10 @@ def createGraph(groupStatsFilePath):
 				if not childName in groupNodeHash:
 					newNode = Node(childName)
 					newNode.components = groupComponentsHash[childName]
+					newNode.peaks = groupPeaksHash[childName]
 					groupNodeHash[childName] = newNode
 				child = groupNodeHash[childName]
 				if len(parent.components & child.components) == len(child.components):
-					componentsToCover = componentsToCover - child.components
 					child.parent = parent
 					parent.neighbors.append(child)
 
@@ -104,21 +115,17 @@ def createGraph(groupStatsFilePath):
 			node.parent = root
 			root.neighbors.append(node)
 	#generate graphviz file
-	print "graph {"
-	print "ratio=1.0"
-	#print "dpi=50"
-	# create legend
-	print "{ rank = sink"
-	print "Legend[shape=none, margine=0, label =<"
-	print '<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">'
-	for factor in sorted(factorIndexHash.keys()):
-		print "<TR><TD>"+factor+"</TD><TD>"+factorIndexHash[factor]+"</TD></TR>"
-	print "</TABLE>>]"
-	print "}"
+	outFile = open(outputPath+"/hierarchy_peakZtest_"+str(threshold)+".txt","w")
+
+	outFile.write("graph {\n")
+	outFile.write( "ratio=2.0\n")
+	outFile.write("dpi=20")
 
 	queue = [root]
 	seen = set()
 	pairSet = set ()
+	nameMappingDict = {} # key group name, value: converted name
+
 	while queue:
 		current = queue[0]
 		queue = queue[1:]
@@ -126,19 +133,29 @@ def createGraph(groupStatsFilePath):
 		for neighbor in current.neighbors:
 			if not neighbor in seen and not (current,neighbor) in pairSet:
 				queue.append(neighbor)
-				print '"'+convertName(factorIndexHash, current.components)+'|'+str(groupPeaksHash[current.name])+ '" -- "'+convertName(factorIndexHash, neighbor.components)+'|'+str(groupPeaksHash[neighbor.name])+'"'
-				pairSet.add((current,neighbor))
-	print "}"
-	return root
+				node1=convertName(factorIndexHash, current.components, mapping)
+				node2=convertName(factorIndexHash, neighbor.components, mapping)
+				nameMappingDict[current.name] = node1
+				nameMappingDict[neighbor.name] = node2
 
+				outFile.write( '"'+ node1+ '" -- "'+node2+'"\n')
+				pairSet.add((current,neighbor))
+	# test each edge and color accordingly
+	
+	outFile.write( "}\n")
+	outFile.close()
+	return root
 
 if __name__ == "__main__":
 	groupStatsFilePath = sys.argv[1]
-        mapping = None 
-        if len(sys.argv)>4: 
-                mapping = readMapping(sys.argv[4]) 
-        threshold = float(sys.argv[2]) 
-        outputPath = sys.argv[3] 
-        root = createGraph(groupStatsFilePath, outputPath, threshold, mapping) 
+	mapping = None
+	if len(sys.argv)>4:
+		mapping = readMapping(sys.argv[4])
+	threshold = float(sys.argv[2])
+	outputPath = sys.argv[3]
+	root = createGraph(groupStatsFilePath, outputPath, threshold, mapping)
+
+
+
 
 
