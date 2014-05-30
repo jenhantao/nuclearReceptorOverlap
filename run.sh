@@ -271,6 +271,12 @@ then
 	# compute overlapping groups
 	echo "computing stats for overlapping groups"
 	python calcGroupStats.py $outputDir/merged.tsv > $outputDir/group_stats.tsv
+	
+	if [ -f $outputDir/factorNameMapping ]
+	then
+		python relabelGroupStats.py $outputDir/group_stats.tsv > $outputDir/group_stats_relabelled.tsv
+
+	fi
 
 	# create human readable file
 	command="python makeSummaryFile.py"
