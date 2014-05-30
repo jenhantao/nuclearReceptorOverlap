@@ -140,7 +140,7 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 
 				outFile.write( '"'+ node1+ '" -- "'+node2+'"\n')
 				pairSet.add((current,neighbor))
-	# test each edge and color accordingly
+	# test each edge
 	
 	outFile.write( "}\n")
 	outFile.close()

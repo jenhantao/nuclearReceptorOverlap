@@ -342,10 +342,38 @@ then
 			fi
 		fi
 	done
-	command+=" > $outputDir/mergedPeakDensity.tsv"
-	echo "$command"
-	$($command)
-	# plot peak density for each individual group
+
+	echo $command
+	$($command > $outputDir/mergedPeakDensity.tsv)
+	echo "python plotPeakDensity $outputDir/mergedPeakDensity.tsv $outputDir/merged.png $outputDir/factorNameMapping.tsv"
+	python plotTagDensity.py $outputDir/mergedTagDensity.tsv $outputDir/merged.png $outputDir/factorNameMapping.tsv
+
+	# plot Tag density for each individual group
+	for splitPath in $outputDir/splitPeaks/groupPeaks*.tsv
+	do
+		command="annotateTags.pl $splitPath $genome -size 2000 -hist 10 -d"
+		for path in $inputPath/*
+		do
+			[ -d "${tagPath}" ] || continue # if not a directory, skip
+			# skip directories that contain input
+			if [[ ! $tagPath  =~ .*[iI]{1}nput.* ]]
+			then
+				if [[ $(basename $tagPath) =~ ^[0-9]-.* ]]
+				then
+					# append tag directory to command
+					command+=" $tagPath"
+				fi
+			fi
+		done
+		echo $command
+		densityOutPath=${splitPath%.tsv}
+		densityOutPath+="_TagDensity.tsv"
+		$($command > densityOutPath)
+		histOutPath=${splitPath%.tsv}
+		histOutPath+="_TagDensity.png"
+		echo "python plotTagDensity $densityOutPath $histOutPath $outputDir/factorNameMapping.tsv"
+		python plotTagDensity.py $densityOutPath $histOutPath $outputDir/factorNameMapping.tsv
+	done
 	
 	# test the number of peaks per group
 	echo "python assessGroupImportance_peakNumber.py $outputDir/group_stats.tsv $significanceThreshold $outputDir $outputDir/factorNameMapping.tsv"
