@@ -322,7 +322,11 @@ then
 	# create a heat map visualizing the peak scores per merged region for each individual group
 	for path in $outputDir/splitPeaks/groupPeaks*.tsv
 	do
-		outPath=${path%.tsv}
+		groupNumber=$(basename $path)
+		groupNumber=${groupNumber#groupPeaks_}
+		groupNumber=${groupNumber%.tsv}
+		outPath=${path%%groupPeaks*.tsv}
+		outPath+="group_$groupNumber"
 		echo "python makePositionHeatMap.py $outputDir/group_summary.tsv $path $outPath"
 		python makePositionHeatMap.py $outputDir/group_summary.tsv $path $outPath
 	done
@@ -351,8 +355,8 @@ then
 	# plot Tag density for each individual group
 	for splitPath in $outputDir/splitPeaks/groupPeaks*.tsv
 	do
-		command="annotateTags.pl $splitPath $genome -size 2000 -hist 10 -d"
-		for path in $inputPath/*
+		command="annotatePeaks.pl $splitPath $genome -size 2000 -hist 10 -d"
+		for tagPath in $inputPath/*
 		do
 			[ -d "${tagPath}" ] || continue # if not a directory, skip
 			# skip directories that contain input
@@ -366,10 +370,16 @@ then
 			fi
 		done
 		echo $command
-		densityOutPath=${splitPath%.tsv}
+		groupNumber=$(basename $splitPath)
+		groupNumber=${groupNumber#groupPeaks_}
+		groupNumber=${groupNumber%.tsv}
+		densityOutPath=${splitPath%%groupPeaks*.tsv}
+		densityOutPath+="group_$groupNumber"
 		densityOutPath+="_TagDensity.tsv"
-		$($command > densityOutPath)
-		histOutPath=${splitPath%.tsv}
+		echo $densityOutPath
+		$($command > $densityOutPath)
+		histOutPath=${splitPath%%groupPeaks*.tsv}
+		histOutPath+="group_$groupNumber"
 		histOutPath+="_TagDensity.png"
 		echo "python plotTagDensity $densityOutPath $histOutPath $outputDir/factorNameMapping.tsv"
 		python plotTagDensity.py $densityOutPath $histOutPath $outputDir/factorNameMapping.tsv
