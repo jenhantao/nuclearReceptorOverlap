@@ -29,7 +29,6 @@ def plotScores(summaryPath, inputPath, outPath):
 	with open(summaryPath) as f:
 		data = f.readlines()
 	factors = data[0].strip().split("\t")[4:]
-	# read in scores and bin according to chromosome
 	mergedRegions = []
 	lineDict = {}
 	otherIDs = set()
@@ -56,8 +55,8 @@ def plotScores(summaryPath, inputPath, outPath):
 			end = int(tokens[3][tokens[3].index("-")+1:])
 			id =tokens[2]
 			lineDict[id] = line
-			#if id in ids:
-			mergedRegions.append((id,chromosome, start, end, peakScores))
+			if id in ids:
+				mergedRegions.append((id,chromosome, start, end, peakScores))
 	# sort by chromosome and start
 	mergedRegions = sorted(mergedRegions, key=lambda x: (x[1], x[2]))
 	chromBreaks = [] # marks the breaks between chromosomes
@@ -86,8 +85,19 @@ def plotScores(summaryPath, inputPath, outPath):
 			else:
 				scoreMatrix[factorNumber][i] = peakScores[factorNumber]	
 				scoreArray.append(peakScores[factorNumber])
+	# remove zero columns
+	toPlotFactors = []
+	toPlotScores =[]
+	for i in range(len(factors)):
+		if np.sum(scoreMatrix[i]) > 0.0:
+			toPlotFactors.append(factors[i])
+			toPlotScores.append(scoreMatrix[i])
+	toPlotScores = np.array(toPlotScores)
+
+
 	fig, ax = plt.subplots()
-	plt.pcolor(scoreMatrix, cmap=cm.Blues)
+	#plt.pcolor(scoreMatrix, cmap=cm.Blues)
+	plt.pcolor(toPlotScores, cmap=cm.Blues)
 	plt.colorbar()
 	### this plotting code is better, but it won't work on the server ###
 	#fig.colorbar(img)
@@ -96,11 +106,11 @@ def plotScores(summaryPath, inputPath, outPath):
 	### ###
 		
 	# fix ticks and labels
-	ax.set_yticks(np.arange(len(factors))+0.5, minor=False)
+	ax.set_yticks(np.arange(len(toPlotFactors))+0.5, minor=False)
 	ax.set_xticks(chromBreaks)
 	ax.set_xticklabels([])
-	ax.set_aspect(len(mergedRegions)/len(factors)/2)
-	ax.set_yticklabels(factors, minor=False)
+	#ax.set_aspect(len(mergedRegions)/len(toPlotFactors))
+	ax.set_yticklabels(toPlotFactors, minor=False)
 	plt.title("Log Peak Scores per Merged Region Per Factor")
 	# save files
 	plt.savefig(outPath+ "_positionHeatmap.png", dpi=400)
