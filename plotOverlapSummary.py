@@ -44,7 +44,7 @@ def convertName(indexHash, components, factorMapping=None):
 			toReturn[-1] = factorMapping[toReturn[-1]]
 	return " ".join(sorted(toReturn))
 
-def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
+def createGraph(groupStatsFilePath, outputPath, mapping = None):
 	with open(groupStatsFilePath) as f:
 		data = f.readlines()
 	groupComponentsHash = {} # key: group name - individual factors count as groups, value: set of factors comprising that group
@@ -209,10 +209,9 @@ if __name__ == "__main__":
 	groupStatsFilePath = sys.argv[1]
 	mapping = None
 	if len(sys.argv)>4:
-		mapping = readMapping(sys.argv[4])
-	threshold = float(sys.argv[2])
-	outputPath = sys.argv[3]
-	root = createGraph(groupStatsFilePath, outputPath, threshold, mapping)
+		mapping = readMapping(sys.argv[3])
+	outputPath = sys.argv[2]
+	root = createGraph(groupStatsFilePath, outputPath, mapping)
 
 
 

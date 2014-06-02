@@ -54,7 +54,7 @@ def createPeakSummaryPlots(inputPath,outPath):
 	plt.xlabel("Number of Peaks (ln)")
 	plt.ylabel("Frequency")
 	plt.title("All Factors/Groups VS Peaks")
-	plt.savefig(outPath+"allFactorsGroups_vs_mergedRegions_log.png")
+	plt.savefig(outPath+"/allFactorsGroups_vs_mergedRegions_log.png")
 	plt.close()
 
 		
@@ -74,7 +74,7 @@ def createPeakSummaryPlots(inputPath,outPath):
 	plt.xlabel("Number of Peaks")
 	plt.ylabel("Frequency")
 	plt.title("All Factors/Groups VS Peaks")
-	plt.savefig(outPath+"allFactorsGroups_vs_mergedRegions.png")
+	plt.savefig(outPath+"/allFactorsGroups_vs_mergedRegions.png")
 	plt.close()
 
 	# plot the number of times a factor appears in a group
@@ -89,7 +89,7 @@ def createPeakSummaryPlots(inputPath,outPath):
 	plt.xlabel("Factor")
 	plt.xticks(range(len(factorLabels)), factorLabels, rotation=90,fontsize=8)
 	plt.title("Factors vs Number of Ocurrences in a Group")
-	plt.savefig(outPath+"factors_vs_groupOcurrence.png")
+	plt.savefig(outPath+"/factors_vs_groupOcurrence.png")
 	plt.close()
 
 	# plot the size of a group vs the number of merged regions
@@ -103,7 +103,7 @@ def createPeakSummaryPlots(inputPath,outPath):
 	plt.xlabel("Number of Factors in Group")
 	plt.ylabel("Number of Peaks (ln)")
 	plt.title("Number of Factors in Group VS Number of Peaks")
-	plt.savefig(outPath+"numFactors_vs_numPeaks.png")
+	plt.savefig(outPath+"/numFactors_vs_numPeaks.png")
 	plt.close()
 
 def createMotifSummaryPlots(inputPath, outputPath):

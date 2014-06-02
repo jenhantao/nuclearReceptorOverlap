@@ -35,9 +35,16 @@ def plotScores(inputPath, outPath, mapping):
 		scoreTokens = tokens[1::3]
 		for i in range(len(scoreTokens)):
 			scores[i].append(scoreTokens[i])
-	for i in range(len(headers)):
-		plt.plot(distances, scores[i])
+	# set colors
+
+	cm = plt.get_cmap('rainbow')
 	ax = plt.gca()
+	ax.set_color_cycle([cm(1.*i/len(headers)) for i in range(len(headers))])
+	for i in range(len(headers)):
+		if i % 2 == 0:
+			plt.plot(distances, scores[i], linewidth=2)
+		else:
+			plt.plot(distances, scores[i], linewidth=2, linestyle="--")
 	# map headerto factor names
 	factors = []
 	for head in headers:
