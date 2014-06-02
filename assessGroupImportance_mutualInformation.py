@@ -168,10 +168,10 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 				p_val = norm.pdf(z_score)	
 				if p_val <= threshold:
 					if z_score < 0.0:
-						outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="red"]\n')
+						outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="red" width=1.5]\n')
 						listFile.write(current.name+"\t"+neighbor.name+"\t"+"up"+"\t"+str(p_val)+"\n")
 					else:
-						outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="green"]\n')
+						outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="green" width=1.5]\n')
 						listFile.write(current.name+"\t"+neighbor.name+"\t"+"down"+"\t"+str(p_val)+"\n")
 				queue.append(neighbor)
 				pairSet.add((current,neighbor))
