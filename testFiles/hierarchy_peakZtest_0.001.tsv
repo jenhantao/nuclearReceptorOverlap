@@ -1,0 +1,151 @@
+Group	p-value	Outcome
+GR LXR PU1 RXR THRalpha2	5.91148930468e-197	up
+LXR PU1 THRalpha2	0.0	up
+GR PU1 RXR	0.0	up
+GR PPARg PU1 RXR	0.0	up
+Foxo1 PU1 RXR RevErbb	0.0	down
+RevErbb THRalpha2	0.0	down
+GR RXR RevErbb THRalpha2	0.0	down
+PPARg PU1	0.0	up
+Foxo1 PU1 RevErbb	0.0	down
+Foxo1 GR LXR RXR	0.0	down
+GR PPARg PU1 RXR RevErbb	0.0	down
+Foxo1 GR LXR PPARg RXR RevErbb THRalpha2	0.0	down
+LXR RXR	0.0	up
+LXR RXR THRalpha2	0.0	up
+PPARg RXR RevErbb	0.0	down
+Foxo1 LXR THRalpha2	0.0	down
+LXR PU1	0.0	up
+GR LXR PU1 RevErbb	0.0	down
+GR RXR RevErbb	0.0	down
+Foxo1 GR LXR RXR RevErbb	0.0	down
+Foxo1 RXR	0.0	up
+LXR PPARg PU1 RXR RevErbb THRalpha2	0.0	down
+LXR PU1 RevErbb THRalpha2	0.0	down
+GR	0.0	up
+Foxo1 LXR	0.0	up
+Foxo1 GR LXR PPARg PU1 RXR THRalpha2	0.0	down
+Foxo1 LXR RXR THRalpha2	0.0	down
+PU1 RevErbb	1.50351922565e-301	up
+Foxo1 GR LXR PU1 RXR RevErbb	0.0	down
+GR LXR PU1	0.0	up
+PPARg RXR THRalpha2	5.60119234769e-140	up
+Foxo1 GR LXR PPARg PU1 RXR	0.0	down
+PU1 RXR RevErbb THRalpha2	0.0	down
+GR PPARg RXR	0.0	up
+GR RevErbb THRalpha2	0.0	down
+PPARg PU1 RXR	0.0	up
+Foxo1 GR LXR PPARg RXR	0.0	down
+GR LXR RXR THRalpha2	6.10967504611e-286	up
+PPARg RXR	0.0	up
+Foxo1 GR PU1 THRalpha2	0.0	down
+LXR PPARg RXR	0.0	up
+RXR RevErbb THRalpha2	0.0	down
+LXR PU1 RXR RevErbb	6.52424831893e-57	up
+Foxo1 LXR PPARg PU1	0.0	down
+Foxo1 PU1 RXR	0.0	up
+Foxo1 PPARg PU1	0.0	down
+LXR PPARg RXR RevErbb	0.0	down
+GR LXR PPARg RXR RevErbb	0.0	down
+PU1 RXR THRalpha2	0.0	up
+GR PU1 THRalpha2	0.0	up
+GR PU1 RXR RevErbb	0.0	down
+Foxo1 LXR PPARg	0.0	down
+Foxo1 GR	7.97950129991e-09	down
+GR LXR RXR	0.0	up
+THRalpha2	0.0	up
+GR LXR PPARg PU1 RXR THRalpha2	0.0	down
+LXR PPARg PU1 THRalpha2	1.43408554553e-28	up
+Foxo1 LXR PPARg RXR	0.0	down
+GR PU1 RevErbb	0.0	down
+LXR THRalpha2	0.0	up
+GR LXR PU1 RXR RevErbb THRalpha2	0.0	down
+LXR RXR RevErbb	3.67094043536e-211	up
+Foxo1	0.0	up
+Foxo1 GR LXR PU1 RevErbb	0.0	down
+LXR PU1 RXR THRalpha2	0.0	up
+Foxo1 GR RXR	5.47675736369e-235	down
+PU1 RXR	0.0	up
+Foxo1 PPARg	2.34467658544e-309	down
+GR LXR RevErbb	0.0	down
+GR PPARg PU1 RXR THRalpha2	0.0	down
+Foxo1 RevErbb	0.0	down
+LXR PPARg PU1 RXR RevErbb	0.0	down
+GR RXR	0.0	up
+Foxo1 LXR PU1 RXR THRalpha2	0.0	down
+GR LXR PPARg PU1	1.56355818176e-270	up
+LXR RevErbb	1.50351922565e-301	up
+RXR RevErbb	0.0	up
+Foxo1 LXR PPARg RXR THRalpha2	0.0	down
+Foxo1 LXR RXR	0.0	up
+GR LXR PPARg PU1 RevErbb	0.0	down
+Foxo1 LXR PPARg PU1 RXR THRalpha2	0.0	down
+Foxo1 GR PU1 RXR	0.0	down
+RevErbb	0.0	up
+PPARg THRalpha2	2.04932605952e-169	up
+Foxo1 GR LXR	0.0	down
+Foxo1 LXR PU1 RXR RevErbb THRalpha2	0.0	down
+GR PU1	0.0	up
+GR LXR PPARg PU1 RXR RevErbb	0.0	down
+LXR PPARg	0.0	up
+LXR PPARg PU1 RXR	0.0	up
+Foxo1 LXR PU1	0.0	up
+GR THRalpha2	0.0	up
+Foxo1 GR LXR RXR THRalpha2	0.0	down
+Foxo1 LXR PPARg PU1 RXR RevErbb THRalpha2	0.0	down
+GR RXR THRalpha2	0.0	up
+GR LXR	0.0	up
+RXR THRalpha2	0.0	up
+Foxo1 GR PPARg PU1 RXR	0.0	down
+Foxo1 LXR PU1 RXR RevErbb	0.0	down
+Foxo1 THRalpha2	0.0216705107894	expected
+Foxo1 LXR PPARg PU1 RXR RevErbb	0.0	down
+Foxo1 GR PU1 RXR THRalpha2	0.0	down
+PU1 RXR RevErbb	7.59616014113e-153	up
+Foxo1 GR LXR PU1 RXR THRalpha2	0.0	down
+LXR	0.0	up
+GR LXR PPARg PU1 RXR RevErbb THRalpha2	0.0	down
+Foxo1 RXR THRalpha2	1.65688297423e-286	down
+GR LXR PU1 RXR RevErbb	0.0	down
+GR LXR THRalpha2	0.0	up
+GR RevErbb	0.0	down
+PU1 RevErbb THRalpha2	0.0	down
+GR PPARg PU1	0.0	up
+PPARg PU1 RXR RevErbb	0.0	down
+Foxo1 LXR PPARg PU1 RXR	0.0	down
+Foxo1 LXR PU1 RXR	0.0	up
+LXR PPARg RXR THRalpha2	1.12492121386e-89	up
+PPARg PU1 RXR THRalpha2	3.51188681733e-50	up
+Foxo1 PPARg RXR	0.0	down
+GR LXR PPARg	0.0	up
+GR PPARg	0.0	up
+LXR PU1 RevErbb	2.03874364211e-92	up
+GR LXR PPARg PU1 RXR	2.45062750166e-255	up
+Foxo1 GR LXR PU1	0.0	down
+LXR RevErbb THRalpha2	0.0	down
+PU1 THRalpha2	0.0	up
+GR LXR PPARg RXR	0.0	up
+GR LXR RXR RevErbb	0.0	down
+PU1	0.0	up
+PPARg PU1 THRalpha2	6.52424831893e-57	up
+Foxo1 LXR PU1 THRalpha2	0.0	down
+LXR PPARg THRalpha2	5.47679166879e-98	up
+GR LXR PPARg RXR THRalpha2	0.0	down
+GR LXR PU1 RXR	0.0	up
+Foxo1 PPARg PU1 RXR	0.0	down
+Foxo1 PU1 RXR THRalpha2	0.0	down
+Foxo1 PU1	0.0	up
+RXR	0.0	up
+GR LXR RXR RevErbb THRalpha2	0.0	down
+LXR RXR RevErbb THRalpha2	0.0	down
+PPARg	0.0	up
+LXR PU1 RXR RevErbb THRalpha2	0.0	down
+Foxo1 PU1 THRalpha2	2.68771711338e-321	down
+LXR PU1 RXR	0.0	up
+	0.0	up
+Foxo1 GR LXR PU1 RXR	0.0	down
+GR LXR PU1 THRalpha2	1.15918596324e-236	up
+Foxo1 GR PU1	1.3539524534e-207	down
+LXR PPARg PU1 RXR THRalpha2	7.27823912219e-27	up
+GR PU1 RXR THRalpha2	0.0	up
+LXR PPARg PU1	0.0	up

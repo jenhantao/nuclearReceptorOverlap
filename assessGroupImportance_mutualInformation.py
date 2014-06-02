@@ -5,13 +5,9 @@
 ### imports ###
 import sys 
 import math
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt 
 import numpy as np
-from matplotlib import rcParams
-import matplotlib.cm as cm
-rcParams.update({'figure.autolayout': True})
+from scipy.stats import norm
+	
 
 def readMapping(path):
 	toReturn = {}
@@ -91,31 +87,39 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 	root.peaks = groupPeaksHash["Root"]
 	root.uniquePeaks = groupPeaksUniqueHash["Root"]
 	groupNodeHash = {} # key: group name, value: node
-
-	endIndex = len(groupArray)
 	for i in range(len(groupArray)):
-		parentName= groupArray[i][0]
-		if not parentName in groupNodeHash:
-			newNode = Node(parentName)
-			newNode.components = groupComponentsHash[parentName]
-			newNode.peaks = groupPeaksHash[parentName]
-			newNode.uniquePeaks = groupPeaksUniqueHash[parentName]
-			groupNodeHash[parentName] = newNode
-		parent = groupNodeHash[parentName]
-		for j in range(len(groupArray)):
-			if not i==j:
-				childName = groupArray[j][0]
-				# create new nodes if necessary
-				if not childName in groupNodeHash:
-					newNode = Node(childName)
-					newNode.components = groupComponentsHash[childName]
-					newNode.peaks = groupPeaksHash[childName]
-					newNode.uniquePeaks= groupPeaksUniqueHash[childName]
-					groupNodeHash[childName] = newNode
-				child = groupNodeHash[childName]
-				if len(parent.components & child.components) == len(child.components):
-					child.parent = parent
-					parent.neighbors.append(child)
+                parentName= groupArray[i][0]
+                if not parentName in groupNodeHash:
+                        newNode = Node(parentName)
+                        newNode.components = groupComponentsHash[parentName]
+                        newNode.peaks = groupPeaksHash[parentName]
+                        newNode.uniquePeaks = groupPeaksUniqueHash[parentName]
+                        groupNodeHash[parentName] = newNode
+                parent = groupNodeHash[parentName]
+                componentsToCover = parent.components.copy()
+                slack = 1 # difference between the size of the parent an the size of the child
+                for j in range(len(groupArray)):
+                        if not i==j:
+                                childName = groupArray[j][0]
+                                # create new nodes if necessary
+                                if not childName in groupNodeHash:
+                                        newNode = Node(childName)
+                                        newNode.components = groupComponentsHash[childName]
+                                        newNode.peaks = groupPeaksHash[childName]
+					newNode.uniquePeaks = groupPeaksUniqueHash[childName]
+                                        groupNodeHash[childName] = newNode
+                                child = groupNodeHash[childName]
+                                if len(parent.components) == len(child.components)+slack:
+                                        if len(parent.components & child.components) == len(child.components):
+                                                componentsToCover = componentsToCover - child.components
+                                                child.parent = parent
+                                                parent.neighbors.append(child)
+                                elif len(parent.components) == len(child.components)+slack+1:
+                                        if not componentsToCover:
+                                                break
+                                        else:
+                                                slack += 1
+
 
 	# attach nodes with no parents to the root
 	for node in groupNodeHash.values():
@@ -123,13 +127,11 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 			node.parent = root
 			root.neighbors.append(node)
 		node.name = convertName(factorIndexHash, node.components, mapping)
+
+	# gather the degree of overlap between each group
 	queue = [root]
 	seen = set()
 	pairSet = set ()
-
-	# gather the degree of overlap between each group
-	overlapCounts = [] #count of shared regions
-	overlapLargeGroupFraction= [] #count of shared regions as a fraction of larger group
 	overlapSmallGroupFraction= [] #count of shared regions as a fraction of smaller group
 	while queue:
 		current = queue[0]
@@ -137,72 +139,45 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 		seen.add(current)
 		for neighbor in current.neighbors:
 			if not neighbor in seen and not (current,neighbor) in pairSet:
-				overlapCounts.append(current.uniquePeaks)
-				overlapLargeGroupFraction.append(float(current.uniquePeaks)/float(current.peaks))
 				overlapSmallGroupFraction.append(float(current.uniquePeaks)/float(neighbor.peaks))
 				queue.append(neighbor)
 				pairSet.add((current,neighbor))
 	
-	overlapCounts = np.array(overlapCounts)
-	overlapLargeGroupFraction= np.array(overlapLargeGroupFraction)
-	overlapSmallGroupFraction= np.array(overlapSmallGroupFraction)
-	# plot distribution of scores on normal and log scale
-	# normal scale plot
-	plt.hist(overlapCounts, normed=True, bins=20)
-	ax = plt.gca()
-	ax.legend(["# Overlaps", "Large Group Fraction", "Small Group Fraction"])
-	plt.ylabel("Frequency")
-	plt.xlabel("Number of Overlaps")
-	plt.title("Number of Overlapping Regions")
-	plt.savefig(outputPath +"/mergedRegion_overlapCount.png")
-	plt.close()
-
-	plt.hist(overlapSmallGroupFraction, normed=True, bins=20)
-	ax = plt.gca()
-	ax.legend(["# Overlaps", "Large Group Fraction", "Small Group Fraction"])
-	plt.ylabel("Frequency")
-	plt.xlabel("Fraction")
-	plt.title("Overlap as Fraction of Smaller Group")
-	plt.savefig(outputPath +"/mergedRegion_smallGroupFraction.png")
-	plt.close()
-
-	plt.hist(overlapLargeGroupFraction, normed=True, bins=20)
-	ax = plt.gca()
-	ax.legend(["Large Group Fraction"])
-	plt.ylabel("Frequency")
-	plt.xlabel("Fraction")
-	plt.title("Overlap as Fraction of Larger Group")
-	plt.savefig(outputPath +"/mergedRegion_largeGroupFraction.png")
-	plt.close()
-
-	# log scale plot
-	plt.hist(np.log(overlapCounts), normed=True, bins=20)
-	ax = plt.gca()
-	ax.legend(["# Overlaps", "Large Group Fraction", "Small Group Fraction"])
-	plt.ylabel("Frequency")
-	plt.xlabel("Number of Overlaps")
-	plt.title("Number of Overlapping Regions")
-	plt.savefig(outputPath +"/mergedRegion_overlapCount_log.png")
-	plt.close()
-
-	plt.hist(np.log(overlapSmallGroupFraction), normed=True, bins=20)
-	ax = plt.gca()
-	ax.legend(["# Overlaps", "Large Group Fraction", "Small Group Fraction"])
-	plt.ylabel("Frequency")
-	plt.xlabel("Fraction")
-	plt.title("Overlap as Fraction of Smaller Group")
-	plt.savefig(outputPath +"/mergedRegion_smallGroupFraction_log.png")
-	plt.close()
-
-	plt.hist(np.log(overlapLargeGroupFraction), normed=True, bins=20)
-	ax = plt.gca()
-	ax.legend(["Large Group Fraction"])
-	plt.ylabel("Frequency")
-	plt.xlabel("Fraction")
-	plt.title("Overlap as Fraction of Larger Group")
-	plt.savefig(outputPath +"/mergedRegion_largeGroupFraction_log.png")
-	plt.close()
-
+	
+	overlapSmallGroupFraction= np.log(np.array(overlapSmallGroupFraction))
+	mean = np.mean(overlapSmallGroupFraction)
+	sd = np.std(overlapSmallGroupFraction)
+	se = sd/float(len(overlapSmallGroupFraction))
+	# print graphviz file 
+        outFile = open(outputPath+"/hierarchy_overlapZtest_"+str(threshold)+".txt","w")
+        listFile = open(outputPath+"/hierarchy_overlapZtest_"+str(threshold)+".tsv","w")
+        outFile.write("graph {\n")
+        outFile.write( "ratio=1.0\n")
+        outFile.write( "dpi=50\n")
+	queue = [root]
+	seen = set()
+	pairSet = set ()
+	while queue:
+		current = queue[0]
+		queue = queue[1:]
+		seen.add(current)
+		for neighbor in current.neighbors:
+			if not neighbor in seen and not (current,neighbor) in pairSet:
+				logOverlap = np.log(float(current.uniquePeaks)/float(neighbor.peaks))
+				z_score = (logOverlap - mean)/se
+				p_val = norm.pdf(z_score)	
+				if p_val <= threshold:
+					if z_score < 0.0:
+						outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="red"]\n')
+						listFile.write(current.name+"\t"+neighbor.name+"\t"+"up"+"\t"+str(p_val)+"\n")
+					else:
+						outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="green"]\n')
+						listFile.write(current.name+"\t"+neighbor.name+"\t"+"down"+"\t"+str(p_val)+"\n")
+				queue.append(neighbor)
+				pairSet.add((current,neighbor))
+	outFile.write("}")
+	outFile.close()
+	listFile.close()
 	return root
 
 if __name__ == "__main__":

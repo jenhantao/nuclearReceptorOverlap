@@ -164,7 +164,9 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 		vals.append(math.log(x))
 
 	hist, bin_edges = np.histogram(vals)
-	mean, se= fitNormal(vals,hist, bin_edges)
+	mean, sd= fitNormal(vals,hist, bin_edges)
+	# divide by size of population
+	se = sd/math.sqrt(len(groupNodeHash.keys()))
 	
 	listFile.write("Group\tp-value\tOutcome\n")
 	for group in groupPeaksHash.keys():
