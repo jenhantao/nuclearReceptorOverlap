@@ -30,24 +30,27 @@ echo "hub url = http://glassome.ucsd.edu/hubs/$(basename $outputDir)/hub.txt" >>
 ### basic analysis for each the peaks and define cistromes ###
 if $stepOne
 then
-	# validation and update if necessary
-	for path in $inputPath/*
-	do
-		[ -e "${path}/tagInfo.txt" ] || continue # if not a directory, skip
-		# if mm9 is specified, it should appear in tagInfo.txt at least once
-		mm9=$(grep $genome $path/tagInfo.txt | wc -l)
-		if [ "$mm9" == "0" ]
-		then
-			echo "WARNING: the following tag directory does not use the genome ${genome}: $path"
-		fi
-		# update tag directories if option is on
-		if $updateTags
-		then
-			command="makeTagDirectory ${path} -update -genome mm9"
-			echo $command
-			$($command)
-		fi
-	done
+	if $updateTags
+	then
+		# validation and update if necessary
+		for path in $inputPath/*
+		do
+			[ -e "${path}/tagInfo.txt" ] || continue # if not a directory, skip
+			# if mm9 is specified, it should appear in tagInfo.txt at least once
+			mm9=$(grep $genome $path/tagInfo.txt | wc -l)
+			if [ "$mm9" == "0" ]
+			then
+				echo "WARNING: the following tag directory does not use the genome ${genome}: $path"
+			fi
+			# update tag directories if option is on
+			if $updateTags
+			then
+				command="makeTagDirectory ${path} -update -genome mm9"
+				echo $command
+				$($command)
+			fi
+		done
+	fi
 
 	#UCSC visualization (makeUCSCfile, makeBigWig.pl)
 	if $makeUCSC
@@ -184,7 +187,6 @@ then
 				outPath=$path
 				outPath=${outPath%_filteredPeaks.tsv}
 				outPath=${outPath##*/}_annotatedPeaks.tsv
-				#command+=" $genome > ${outputDir}/${outPath}"
 				command+=" $genome"
 				echo $command
 				$($command > ${outputDir}/${outPath})
@@ -205,14 +207,15 @@ then
 						command+="$path"
 					fi
 				fi
-			# annotate with known motifs
-			#command+=" -m $outputDir/mergedMotifs/homerMotifs.all.motifs"
-		done
+			done
+		# annotate with known motifs
+		command+=" -m $outputDir/knownMotifs.motif"
 #		if $findMotifs
 #		then
 #			command+=" -m $outputDir/mergedMotifs/homerMotifs.all.motifs"
 #		fi
 #		echo $command
+		echo $command
 		$command > $outputDir/merged_annotated.tsv
 	fi
 	#Quantification of Data at Peaks/Regions in the Genome/Histograms and Heatmaps (annotatePeaks.pl)
@@ -358,7 +361,7 @@ then
 		done
 	fi
 	
-	# conduct GO analysis on each split peak file
+	# conduct GO analysis on each split peak file and annotate known motifs
 	if $GO
 	then
 	if [ ! -d $outputDir/GO_analysis ]
@@ -374,8 +377,9 @@ then
 			annotatedPath=$outpath
 			annotatedPath="group${annotatedPath}_annotated.tsv"
 			outpath="group${outpath}_GO_analysis"
-			echo "annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath > $outputDir/splitPeaks/$annotatedPath"
-			annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath > $outputDir/splitPeaks/$annotatedPath
+			echo "annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath -m $outputDir/knownMotifs.motif> $outputDir/splitPeaks/$annotatedPath"
+			annotatePeaks.pl $path mm9 -go $outputDir/GO_analysis/$outpath -m $outputDir/knownMotifs.motif> $outputDir/splitPeaks/$annotatedPath
+			#annotatePeaks.pl $path mm9 -m $outputDir/knownMotifs.motif> $outputDir/splitPeaks/$annotatedPath
 		done
 	
 		# create bed files for each split group file
@@ -428,7 +432,10 @@ then
 	echo "python makeGroupHeatMap.py $outputDir/group_summary.tsv $outputDir"
 	python makeGroupHeatMap.py $outputDir/group_summary.tsv $outputDir
 	
-	# create a heat map visualizing the peak scores per merged region for all groups
+	# create a heat map visualizing the peak scores per merged region for all groups sorting by a particular factor
+	echo "python makeGradientPositionHeatMaps.py $outputDir/group_summary.tsv $outputDir/merged.tsv $outputDir/merged"
+	python makeGradientPositionHeatMaps.py $outputDir/group_summary.tsv $outputDir/merged.tsv $outputDir/merged
+	
 	echo "python makePositionHeatMap.py $outputDir/group_summary.tsv $outputDir/merged.tsv $outputDir/merged"
 	python makePositionHeatMap.py $outputDir/group_summary.tsv $outputDir/merged.tsv $outputDir/merged
 
@@ -444,6 +451,8 @@ then
 			outPath+="group_$groupNumber"
 			echo "python makePositionHeatMap.py $outputDir/group_summary.tsv $path $outPath"
 			python makePositionHeatMap.py $outputDir/group_summary.tsv $path $outPath
+			echo "python makeGradientPositionHeatMaps.py $outputDir/group_summary.tsv $path $outPath"
+			python makeGradientPositionHeatMaps.py $outputDir/group_summary.tsv $path $outPath
 		done
 	fi
 
@@ -468,8 +477,7 @@ then
 	echo "python plotTagkDensity $outputDir/mergedTagDensity.tsv $outputDir/merged_tagDensity.png $outputDir/factorNameMapping.tsv"
 	python plotTagDensity.py $outputDir/mergedTagDensity.tsv $outputDir/merged_tagDensity.png $outputDir/factorNameMapping.tsv
 
-	#if $plotPeakDensity
-	if false
+	if $plotPeakDensity
 	then
 		# plot Tag density for each individual group
 		for splitPath in $outputDir/splitPeaks/groupPeaks*.tsv
@@ -518,14 +526,14 @@ then
 	dot -Tpng $outputDir/hierarchy_overlapZtest_$significanceThreshold.txt > $outputDir/hierarchy_overlapZtest_$significanceThreshold.png
 
 	# mege the assessments
-	echo "python combineGroupAssessments.py $outputDir/hierarchy_peakZtest_$significanceThreshold.txt $outputDir/hierarchy_overlapZtest.txt $outputDir/hierarchy_mergedZ_$significanceThreshold"
-	python combineGroupAssessments.py $outputDir/hierarchy_peakZtest_$significanceThreshold.txt $outputDir/hierarchy_overlapZtest_$significanceThreshold.txt $outputDir/hierarchy_mergedZtest.txt
+	echo "python combineGroupAssessments.py $outputDir/hierarchy_peakZtest_$significanceThreshold.txt $outputDir/hierarchy_overlapZtest_$significanceThreshold.txt $outputDir/hierarchy_mergedZtest_$significanceThreshold"
+	python combineGroupAssessments.py $outputDir/hierarchy_peakZtest_$significanceThreshold.txt $outputDir/hierarchy_overlapZtest_$significanceThreshold.txt $outputDir/hierarchy_mergedZtest_$significanceThreshold
 	
 	# create images for each set of edges
-	echo "dot -Tpng $outputDir/hierarchy_mergedZ_${significanceThreshold}_upRegulated.txt > $outputDir/hierarchy_mergedZ_${significanceThreshold}.png"
-	dot -Tpng $outputDir/hierarchy_mergedZ_${significanceThreshold}_upRegulated.txt > $outputDir/hierarchy_mergedZ_${significanceThreshold}.png
-	echo "dot -Tpng $outputDir/hierarchy_mergedZ_${significanceThreshold}_downRegulated.txt > $outputDir/hierarchy_mergedZ_${significanceThreshold}.png"
-	dot -Tpng $outputDir/hierarchy_mergedZ_${significanceThreshold}_downRegulated.txt > $outputDir/hierarchy_mergedZ_${significanceThreshold}.png
+	echo "dot -Tpng $outputDir/hierarchy_mergedZtest_${significanceThreshold}_upRegulated.txt > $outputDir/hierarchy_mergedZtest_${significanceThreshold}.png"
+	dot -Tpng $outputDir/hierarchy_mergedZtest_${significanceThreshold}_upRegulated.txt > $outputDir/hierarchy_mergedZtest_${significanceThreshold}_upRegulated.png
+	echo "dot -Tpng $outputDir/hierarchy_mergedZtest_${significanceThreshold}_downRegulated.txt > $outputDir/hierarchy_mergedZtest_${significanceThreshold}.png"
+	dot -Tpng $outputDir/hierarchy_mergedZtest_${significanceThreshold}_downRegulated.txt > $outputDir/hierarchy_mergedZtest_${significanceThreshold}_downRegulated.png
 
 	# find meaningful groups
 	echo "python findGroups.py $outputDir/hierarchy_peakZtest_$significanceThreshold.tsv $outputDir/hierarchy_overlapZtest_$significanceThreshold.tsv"

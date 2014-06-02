@@ -29,9 +29,9 @@ def combineGraphs(peakNumberPath, mutualInformationPath, outPath):
 	outFileUp = open(outPath+"_upRegulated.txt", "w")	
 	outFileDown = open(outPath+"_downRegulated.txt", "w")	
 	outFileUp.write("graph {\n")
-	outFileUp.write("ratio=1.0\n")
+	outFileUp.write("ratio=0.5\n")
 	outFileDown.write("graph {\n")
-	outFileDown.write("ratio=1.0\n")
+	outFileDown.write("ratio=0.5\n")
 	for node in nodeLines:
 		outFileUp.write(node+"\n")
 		outFileDown.write(node+"\n")

@@ -12,7 +12,7 @@ export home="/data/home/jtao/"
 export genome="mm9"
 export generalInput="~/background_test/standardInputPeaks.tsv"
 export useControl=true
-export updateTags=true
+export updateTags=false
 export overlapDistance=200 # bp distance for calculating overlaps
 # options for whether or not to run pipeline stages
 export makeUCSC=false
@@ -20,7 +20,7 @@ export findPeaks=false
 export findMotifs=false
 export annotatePeaks=true
 export quantifyPeaks=false
-export cluster=false
+export updateTagDir=false
 
 # threshold used for filtering peaks
 export percentileThreshold="0"
@@ -28,4 +28,6 @@ export significanceThreshold="0.001"
 
 #variables for making images
 export plotPeakDensity=true
-export plotPositionHeat=false
+export plotPositionHeat=true
+
+export GO=true
