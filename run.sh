@@ -408,8 +408,8 @@ then
 		rm -rf $outputDir/summaryPlots
 	fi
 	mkdir $outputDir/summaryPlots
-	echo "python makeSummaryPlots.py $outputDir/group_stats_relabelled.tsv $outputDir/summaryPlots"
-	python makeSummaryPlots.py $outputDir/group_stats_relabelled.tsv $outputDir/summaryPlots
+	echo "python makeSummaryPlots.py $outputDir/group_stats.tsv $outputDir/summaryPlots"
+	python makeSummaryPlots.py $outputDir/group_stats.tsv $outputDir/summaryPlots
 
 	# create summary plots of how the groups overlap
 	if [ -d $outputDir/overlapSummaryPlots ]
