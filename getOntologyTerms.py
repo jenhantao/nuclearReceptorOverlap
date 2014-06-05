@@ -92,7 +92,7 @@ def getOntology(path, groupFileMapping, significanceThreshold, outPath, mapping)
 
 if __name__ == "__main__":
 	inputPath = sys.argv[1]
-	significanceThreshold = float(sys.argv[2])
+	significanceThreshold = float(sys.argv[2])*10 # relax a little bit
 	outPath = sys.argv[3]
 	groupMappingPath = sys.argv[4]
 	factorNameMapping = sys.argv[5]

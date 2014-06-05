@@ -26,18 +26,18 @@ class Node:
 	def __init__(self, name = None):
 		self.parent = None
 		self.neighbors = []
-		self.components = set()
+		self.components = []
 		self.peaks = None
 		self.name = name
 
 def convertName(indexHash, components, factorMapping=None):
-	compList = sorted(list(components))
+	compList = list(components)
 	toReturn = []
 	for comp in compList:
 		toReturn.append(indexHash[comp])
 		if mapping:
 			toReturn[-1] = factorMapping[toReturn[-1]]
-	return " ".join(sorted(toReturn))
+	return " ".join(toReturn)
 
 def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 	with open(groupStatsFilePath) as f:
@@ -54,7 +54,7 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 		group = tokens[0]
 		groupPeaksHash[group] = int(tokens[3])
 		groupPeaksUniqueHash[group] = int(tokens[2])
-		groupTokens = set(group[1:-1].split(", "))
+		groupTokens = group[1:-1].split(", ")
 		groupComponentsHash[group] = groupTokens
 		# add in individual factors
 		for token in groupTokens:
@@ -95,7 +95,7 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 			newNode.peaks = groupPeaksHash[parentName]
 			groupNodeHash[parentName] = newNode
 		parent = groupNodeHash[parentName]
-		componentsToCover = parent.components.copy()
+		componentsToCover = set(parent.components)
 		slack = 1 # difference between the size of the parent an the size of the child
 		for j in range(len(groupArray)):
 			if not i==j:
@@ -108,8 +108,8 @@ def createGraph(groupStatsFilePath, outputPath, threshold, mapping = None):
 					groupNodeHash[childName] = newNode
 				child = groupNodeHash[childName]
 				if len(parent.components) == len(child.components)+slack:
-					if len(parent.components & child.components) == len(child.components):
-						componentsToCover = componentsToCover - child.components
+					if len(set(parent.components) & set(child.components)) == len(child.components):
+						componentsToCover = componentsToCover - set(child.components)
 						child.parent = parent
 						parent.neighbors.append(child)
 				elif len(parent.components) == len(child.components)+slack+1:

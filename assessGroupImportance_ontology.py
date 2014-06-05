@@ -158,8 +158,8 @@ def createGraph(groupStatsFilePath, outputPath, threshold, ontologyMapping, mapp
 	sd = np.std(overlapSmallGroupFraction)
 	se = sd/float(len(overlapSmallGroupFraction))
 	# print graphviz file 
-        outFile = open(outputPath+"/hierarchy_overlapZtest_"+str(threshold)+".txt","w")
-        listFile = open(outputPath+"/hierarchy_overlapZtest_"+str(threshold)+".tsv","w")
+        outFile = open(outputPath+"/hierarchy_ontologyZtest_"+str(threshold)+".txt","w")
+        listFile = open(outputPath+"/hierarchy_ontologyZtest_"+str(threshold)+".tsv","w")
         outFile.write("graph {\n")
         outFile.write( "ratio=1.0\n")
         outFile.write( "dpi=50\n")
@@ -183,16 +183,19 @@ def createGraph(groupStatsFilePath, outputPath, threshold, ontologyMapping, mapp
 							fraction = float(len(shared))/float(len(ontologyMapping[neighbor.name]))
 						else:
 							fraction = 0.0
-						outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="red" width=1.5 label ="'+str(fraction)+'" ]\n')
-						listFile.write(current.name+"\t"+neighbor.name+"\t"+"down"+"\t"+str(p_val)+"\t"+str(fraction)+"\t"+",".join(list(shared))+"\n")
+						outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="red" width=1.5 label ="'+str(len(shared))+'" ]\n')
+						listFile.write(current.name+"\t"+neighbor.name+"\t"+"down"+"\t"+str(len(shared))+"\t"+",".join(list(shared))+"\n")
 					else:
 						shared = ontologyMapping[current.name] & ontologyMapping[neighbor.name]
 						if len(ontologyMapping[neighbor.name]) > 0:
 							fraction = float(len(shared))/float(len(ontologyMapping[neighbor.name]))
 						else:
 							fraction = 0.0
-						outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="green" width=1.5 label ="'+str(fraction)+'" ]\n')
-						listFile.write(current.name+"\t"+neighbor.name+"\t"+"up"+"\t"+str(p_val)+"\t"+str(fraction)+"\t"+",".join(list(shared))+"\n")
+						outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="green" width=1.5 label ="'+str(len(shared))+'" ]\n')
+						listFile.write(current.name+"\t"+neighbor.name+"\t"+"up"+"\t"+str(len(shared))+"\t"+",".join(list(shared))+"\n")
+				else:
+					outFile.write('"'+current.name+'" -- "'+neighbor.name+'" [color="black" width=1.5 label ="'+str(len(shared))+'" ]\n')
+					listFile.write(current.name+"\t"+neighbor.name+"\t"+"expected"+"\t"+str(len(shared))+"\t"+",".join(list(shared))+"\n")
 				queue.append(neighbor)
 				pairSet.add((current,neighbor))
 	outFile.write("}")
@@ -210,8 +213,4 @@ if __name__ == "__main__":
 	ontologyMapping = readOntologyMapping(ontologyPath)
 	outputPath = sys.argv[2]
 	root = createGraph(groupStatsFilePath, outputPath, threshold, ontologyMapping, mapping)
-
-
-
-
 

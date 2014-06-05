@@ -525,21 +525,30 @@ then
 	echo "dot -Tpng $outputDir/hierarchy_peakZtest_$significanceThreshold.txt > $outputDir/hierarchy_overlapZtest_$significanceThreshold.png"
 	dot -Tpng $outputDir/hierarchy_overlapZtest_$significanceThreshold.txt > $outputDir/hierarchy_overlapZtest_$significanceThreshold.png
 
+	# gene ontology stuff
+	echo "python getOntologyTerms.py $outputDir/GO_analysis/ $significanceThreshold $outputDir/ontologyTerms.tsv $outputDir/splitPeaks/groupPeakFileMapping.tsv $outputDir/factorNameMapping.tsv"
+	python getOntologyTerms.py $outputDir/GO_analysis/ $significanceThreshold $outputDir/ontologyTerms.tsv $outputDir/splitPeaks/groupPeakFileMapping.tsv $outputDir/factorNameMapping.tsv
+
+	echo "python assessGroupImportance_ontology.py $outputDir/group_stats.tsv $outputDir $significanceThreshold $outputDir/factorNameMapping.tsv"
+	python assessGroupImportance_ontology.py $outputDir/group_stats.tsv $outputDir $significanceThreshold $outputDir/ontologyTerms.tsv $outputDir/factorNameMapping.tsv
+
 	# mege the assessments
-	echo "python combineGroupAssessments.py $outputDir/hierarchy_peakZtest_$significanceThreshold.txt $outputDir/hierarchy_overlapZtest_$significanceThreshold.txt $outputDir/hierarchy_mergedZtest_$significanceThreshold"
-	python combineGroupAssessments.py $outputDir/hierarchy_peakZtest_$significanceThreshold.txt $outputDir/hierarchy_overlapZtest_$significanceThreshold.txt $outputDir/hierarchy_mergedZtest_$significanceThreshold
-	
+	echo "python combineGroupAssessments.py $outputDir/hierarchy_peakZtest_$significanceThreshold.txt $outputDir/hierarchy_ontologyZtest_$significanceThreshold.txt $outputDir/hierarchy_mergedZtest_$significanceThreshold"
+	python combineGroupAssessments.py $outputDir/hierarchy_peakZtest_$significanceThreshold.txt $outputDir/hierarchy_ontologyZtest_$significanceThreshold.txt $outputDir/hierarchy_mergedZtest_$significanceThreshold
 	# create images for each set of edges
 	echo "dot -Tpng $outputDir/hierarchy_mergedZtest_${significanceThreshold}_upRegulated.txt > $outputDir/hierarchy_mergedZtest_${significanceThreshold}.png"
 	dot -Tpng $outputDir/hierarchy_mergedZtest_${significanceThreshold}_upRegulated.txt > $outputDir/hierarchy_mergedZtest_${significanceThreshold}_upRegulated.png
 	echo "dot -Tpng $outputDir/hierarchy_mergedZtest_${significanceThreshold}_downRegulated.txt > $outputDir/hierarchy_mergedZtest_${significanceThreshold}.png"
 	dot -Tpng $outputDir/hierarchy_mergedZtest_${significanceThreshold}_downRegulated.txt > $outputDir/hierarchy_mergedZtest_${significanceThreshold}_downRegulated.png
 
-	# find meaningful groups
-	echo "python findGroups.py $outputDir/hierarchy_peakZtest_$significanceThreshold.tsv $outputDir/hierarchy_overlapZtest_$significanceThreshold.tsv"
-	python findGroups.py $outputDir/hierarchy_peakZtest_$significanceThreshold.tsv $outputDir/hierarchy_overlapZtest_$significanceThreshold.tsv
-
-
+	# create plots and files summarizing
+	if [ -d $outputDir/hierarchySummaryPlots ]
+	then
+		rm -rf $outputDir/hierarchySummaryPlots
+	fi
+	mkdir $outputDir/hierarchySummaryPlots
+	echo "python summarizeAssesments.py $outputDir/hierarchy_peakZtest_$significanceThreshold.tsv $outputDir/hierarchy_ontologyZtest_$significanceThreshold.tsv $outputDir/hierarchySummaryPlots/hierarchy_$significanceThreshold"
+	python summarizeAssesments.py $outputDir/hierarchy_peakZtest_$significanceThreshold.tsv $outputDir/hierarchy_ontologyZtest_$significanceThreshold.tsv $outputDir/hierarchySummaryPlots/hierarchy_$significanceThreshold
 
 fi
 

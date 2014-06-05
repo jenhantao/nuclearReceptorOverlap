@@ -27,10 +27,8 @@ export percentileThreshold="0"
 export significanceThreshold="0.001"
 
 #variables for making images
-export plotPeakDensity=true
-export plotPositionHeat=true
-
+export plotPeakDensity=false
+export plotPositionHeat=false
 export GO=true
-
 
 export cluster=false
