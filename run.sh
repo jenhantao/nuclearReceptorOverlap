@@ -430,7 +430,10 @@ then
 
 	# create a heat map visualizing the connectivity of the groups
 	echo "python makeGroupHeatMap.py $outputDir/group_summary.tsv $outputDir"
-	python makeGroupHeatMap.py $outputDir/group_summary.tsv $outputDir
+	python makeGroupHeatMapPeaks.py $outputDir/group_summary.tsv $outputDir
+	
+	# create a heat map visualizing the overlap of ontology terms
+	python makeGroupHeatMapPeaks.py $outputDir/ontologyTerms.tsv $outputDir
 	
 	# create a heat map visualizing the peak scores per merged region for all groups sorting by a particular factor
 	echo "python makeGradientPositionHeatMaps.py $outputDir/group_summary.tsv $outputDir/merged.tsv $outputDir/merged"

@@ -43,6 +43,35 @@ for line in data[1:]:
 	listFile.write("\t".join([node1,node2,nodeStates[node1],nodeStates[node2],status,sharedTerms,terms])+"\n")
 listFile.close()
 
+# plot shared number histogram
+upShared = []
+downShared = []
+expectedShared = []
+for edge in edges:
+	state = edge[2]
+	shared = np.log(int(edge[3])+1)
+	if state == "up":
+		upShared.append(shared)
+	elif state == "down":
+		downShared.append(shared)
+	elif state == "expected":
+		expectedShared.append(shared)
+plt.hist(upShared, normed = True)
+plt.xlabel("Number of Shared Regions (log)")
+plt.ylabel("Frequency")
+plt.savefig(outPath+"_scoreHist_up.png")
+plt.close()
+plt.hist(downShared, normed = True)
+plt.xlabel("Number of Shared Regions (log)")
+plt.ylabel("Frequency")
+plt.savefig(outPath+"_scoreHist_down.png")
+plt.close()
+plt.hist(expectedShared, normed = True)
+plt.xlabel("Number of Shared Regions (log)")
+plt.ylabel("Frequency")
+plt.savefig(outPath+"_scoreHist_expected.png")
+plt.close()
+
 # plot edge and node type vs number of shared terms
 numShared = {} # state type, number of shared
 for edge in edges:
