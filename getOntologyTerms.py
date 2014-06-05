@@ -46,7 +46,7 @@ def getGroupMappings(groupMappingPath, factorNameMapping):
 def getOntology(path, groupFileMapping, significanceThreshold, outPath, mapping):
 	logSig = np.log(significanceThreshold)
 	outFile = open(outPath, "w")
-	outFile.write("Group\tSource\tTerms\n")
+	outFile.write("Group\tTerms\n")
 	for group in sorted(groupFileMapping.keys()):
 		toWrite = mapping[str(group)]
 		files = groupFileMapping[group]
