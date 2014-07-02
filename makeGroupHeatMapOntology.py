@@ -13,27 +13,32 @@ rcParams.update({'figure.autolayout': True})
 
 # inputs: path to groups summary file, directory to place images in
 # outputs: creates plot image file in in outPath
-def plotScores(inputPath, outPath, toExclude = []):
-	with open(inputPath) as f:
+def plotScores(inputPath, outPath, mappingPath, toExclude = []):
+	factorIndexDict = {}
+	with open(mappingPath) as f:
 		data = f.readlines()
-	factors = data[0].strip().split("\t")[4:]
+	factors = []
+	for line in data:
+		tokens = line.strip().split("\t")
+		factors.append(tokens[1])
 	for te in toExclude:
 		if te in factors:
 			factors.remove(te)
-	factorIndexDict = {}
 	for i in range(len(factors)):
 		factorIndexDict[factors[i]] = i
+
 	# read in scores and bin according to chromosome
+	with open(inputPath) as f:
+		data = f.readlines()
 	mergedRegions = []
 	scoreMatrix = np.zeros((len(factors),len(factors)))
 	for line in data[1:]:
 		tokens = line.strip().split("\t")
-		groupFactors = tokens[0].split(",")
-		numSharedTerms =len(tokens[1])
+		groupFactors = tokens[0].split()
+		numSharedTerms = float(len(tokens)-1)
 		for te in toExclude:
 			if te in groupFactors:
 				groupFactors.remove(te)
-		numShared = 
 		# enumerate over all pairs in the group
 		for i in range(len(groupFactors)-1):
 			factor1 = groupFactors[i]
@@ -52,9 +57,10 @@ def plotScores(inputPath, outPath, toExclude = []):
 	# convert all values to log
 	scoreMatrix = np.log(scoreMatrix)
 	fig, ax = plt.subplots()
-	img = ax.imshow(scoreMatrix, cmap=cm.Greens, interpolation="none") 
+	img = ax.imshow(scoreMatrix, cmap=cm.Blues, interpolation="none") 
 	fig.colorbar(img)
 	plt.title("Ontology Term Co-occurrence Fraction")
+
 	ax.set_yticks(np.arange(len(factors))+0.5, minor=False)
 	ax.set_yticks(np.arange(len(factors)), minor=False)
         ax.set_yticklabels(factors, minor=False)		
@@ -64,10 +70,12 @@ def plotScores(inputPath, outPath, toExclude = []):
 
 		
 	# save files
-	plt.savefig(outPath+"/groupHeatMapFraction.png", bbox_inches='tight', dpi=200)
+	plt.savefig(outPath+"/groupHeatMapOntology.png", bbox_inches='tight', dpi=200)
 	plt.close()
 		
 if __name__ == "__main__":
 	summaryPath = sys.argv[1]
 	outPath = sys.argv[2]
-	plotScores(summaryPath, outPath)
+	mappingPath = sys.argv[3]
+	plotScores(summaryPath, outPath, mappingPath)
+	#plotScores(summaryPath, outPath, mappingPath, ["RXR","LXR","PU1"])
