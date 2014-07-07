@@ -54,7 +54,7 @@ def plotScores(inputPath, outPath, toExclude = []):
 	fig, ax = plt.subplots()
 	img = ax.imshow(scoreMatrix, cmap=cm.Greens, interpolation="none") 
 	fig.colorbar(img)
-	plt.title("Ontology Term Co-occurrence Fraction")
+	plt.title("Peak  Co-occurrence Fraction")
 	ax.set_yticks(np.arange(len(factors))+0.5, minor=False)
 	ax.set_yticks(np.arange(len(factors)), minor=False)
         ax.set_yticklabels(factors, minor=False)		
